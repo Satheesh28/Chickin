@@ -1,0 +1,364 @@
+<div class="page-title">
+    <div class="title-env">
+        <h1 class="title">Members List</h1>
+        <p class="description">Manage members.</p>
+    </div>
+    <div class="breadcrumb-env">
+        <ol class="breadcrumb bc-1">
+            <!-- <li> <a ui-sref="app.adminDashboard"><i class="fa-home"></i>Dashboard</a> </li> -->
+            <li class="active"> <strong>Members List</strong> </li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+            <li class="active"> <a href="#all" data-toggle="tab">All Members</a> </li>
+            <li> <a href="#administrators" data-toggle="tab">Administrators</a> </li>
+            <li> <a href="#subscribers" data-toggle="tab">Officers</a> </li>
+            <li> <a href="#Officemanager" data-toggle="tab">Office Managers</a> </li>
+        </ul>
+        <div class="tab-content">
+            
+            <div class="tab-pane active" id="all">
+                    <div class="row search-env">
+                            <form>
+                                <div class="col-sm-12 text-left">
+                                    <input class="form-control input-lg" type="text" placeholder="Search by Name" [(ngModel)]="userFilter" (keyup.enter)="SearchListUser(userFilter,0,0)" [ngModelOptions]="{standalone: true}">
+                                    <button type="submit" class="btn-unstyled" style="right: 15px;"> <i class="fa fa-search"></i> </button>
+                                </div>
+                            </form>
+                        </div>
+                <table class="table table-hover members-table middle-align">
+                    <thead>
+                        <tr>
+                            <th>Name and Role</th>
+                            <th>E-Mail</th>
+                            <th>ID</th>
+                            <th>Settings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of allItems" >
+                       
+                            <td class="user-name" > 
+                                <i (click)="showUser(user)">
+                              <a href="javascript:void(0);" class="name" style="text-transform: capitalize;">{{(user.first_name + ' ' + user.last_name)||user.username}}</a>
+                               <span *ngIf="user.role_id == 1">Administrator</span> 
+                               <span *ngIf="user.role_id == 2">Officer</span> 
+                               <span *ngIf="user.role_id == 3">Office Manger</span> 
+                            </i>
+                              </td>
+                            <td> <span class="email">{{user.email}}</span> </td>
+                            <td class="user-id" >{{user.id}}
+                            </td>
+                            <td class="action-links">
+                                <a [routerLink]="['/user',   user.id ]"  class="edit"> <i class="linecons-pencil"></i> Edit Profile
+                                </a>
+                                <a href="javascript:void(0);"  (click)="deleteuser(user)" class="delete"> <i class="linecons-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul *ngIf="pager.pages && pager.pages.length" class="pagination" style="float:right;">
+                        <li [ngClass]="{disabled:pager.currentPage === 1}">
+                            <a (click)="setPage(1)">First</a>
+                        </li>
+                        <li [ngClass]="{disabled:pager.currentPage === 1}">
+                            <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+                        </li>
+                        <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                            <a (click)="setPage(page)">{{page}}</a>
+                        </li>
+                        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                            <a (click)="setPage(pager.currentPage + 1)">Next</a>
+                        </li>
+                        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                            <a (click)="setPage(pager.totalPages)">Last</a>
+                        </li>
+                    </ul>
+                <div class="row">
+                    <div class="col-sm-12 text-right text-center-sm">
+                        <ul uib-pagination boundary-links="true" total-items="userList.length" ng-model="vm.allUser.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="vm.allUser.limit" first-text="&laquo;" last-text="&raquo;"></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="administrators">
+                    <div class="row search-env">
+                            <form>
+                                <div class="col-sm-12 text-left">
+                                    <input class="form-control input-lg" type="text" placeholder="Search by Name" [(ngModel)]="userFilterAdmin" (keyup.enter)="SearchListUserAdmin(userFilterAdmin,0,0)" [ngModelOptions]="{standalone: true}">
+                                    <button type="submit" class="btn-unstyled" style="right: 15px;"> <i class="fa fa-search"></i> </button>
+                                </div>
+                            </form>
+                        </div>
+                <table class="table table-hover members-table middle-align">
+                    <thead>
+                        <tr>
+                            <th>Name and Role</th>
+                            <th>E-Mail</th>
+                            <th>ID</th>
+                            <th>Settings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of allItemsAdmin" >
+                       
+                            <td class="user-name"> 
+                                <i (click)="showUser(user)">
+                                    <a href="javascript:void(0);" class="name" style="text-transform: capitalize;">{{(user.first_name + ' ' + user.last_name)||user.username}}</a>
+                                    <span *ngIf="user.role_id == 1">Administrator</span> 
+                                    <span *ngIf="user.role_id == 2">Officer</span> 
+                                    <span *ngIf="user.role_id == 3">Office Manger</span> 
+                                </i>
+                              </td>
+                            <td> <span class="email">{{user.email}}</span> </td>
+                            <td class="user-id" >{{user.id}}
+                            </td>
+                            <td class="action-links">
+                                <a [routerLink]="['/user',   user.id ]"  class="edit"> <i class="linecons-pencil"></i> Edit Profile
+                                </a>
+                                <a href="javascript:void(0);" (click)="deleteuser(user)" class="delete"> <i class="linecons-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul *ngIf="pagerAdmin.pages && pagerAdmin.pages.length" class="pagination" style="float:right;">
+                        <li [ngClass]="{disabled:pagerAdmin.currentPage === 1}">
+                            <a (click)="setPageAdmin(1)">First</a>
+                        </li>
+                        <li [ngClass]="{disabled:pagerAdmin.currentPage === 1}">
+                            <a (click)="setPageAdmin(pagerAdmin.currentPage - 1)">Previous</a>
+                        </li>
+                        <li *ngFor="let pageAdmin of pagerAdmin.pages" [ngClass]="{active:pagerAdmin.currentPage === pageAdmin}">
+                            <a (click)="setPageAdmin(pageAdmin)">{{pageAdmin}}</a>
+                        </li>
+                        <li [ngClass]="{disabled:pagerAdmin.currentPage === pagerAdmin.totalPages}">
+                            <a (click)="setPageAdmin(pagerAdmin.currentPage + 1)">Next</a>
+                        </li>
+                        <li [ngClass]="{disabled:pagerAdmin.currentPage === pagerAdmin.totalPages}">
+                            <a (click)="setPageAdmin(pagerAdmin.totalPages)">Last</a>
+                        </li>
+                    </ul>
+                <div class="row">
+                    <div class="col-sm-12 text-right text-center-sm">
+                        <ul uib-pagination boundary-links="true" total-items="admins.length" ng-model="vm.adminUser.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="vm.adminUser.limit" first-text="&laquo;" last-text="&raquo;"></ul>
+                    </div>
+                </div>
+            </div>
+           
+
+
+            <div class="tab-pane" id="subscribers">
+                    <div class="row search-env">
+                            <form>
+                                <div class="col-sm-12 text-left">
+                                    <input class="form-control input-lg" type="text" placeholder="Search by Name" [(ngModel)]="userFilterOfficer" (keyup.enter)="SearchListUserOfficer(userFilterOfficer,0,0)" [ngModelOptions]="{standalone: true}">
+                                    <button type="submit" class="btn-unstyled" style="right: 15px;"> <i class="fa fa-search"></i> </button>
+                                </div>
+                            </form>
+                        </div>
+                <table class="table table-hover members-table middle-align">
+                    <thead>
+                        <tr>
+                            <th>Name and Role</th>
+                            <th>E-Mail</th>
+                            <th>ID</th>
+                            <th>Settings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of allItemsAdminofficer" >
+                       
+                            <td class="user-name"> 
+                                <i (click)="showUser(user)">
+                                    <a href="javascript:void(0);" class="name" style="text-transform: capitalize;">{{(user.first_name + ' ' + user.last_name)||user.username}}</a>
+                                    <span *ngIf="user.role_id == 1">Administrator</span> 
+                                    <span *ngIf="user.role_id == 2">Officer</span> 
+                                    <span *ngIf="user.role_id == 3">Office Manger</span> 
+                                </i>
+                              </td>
+                            <td> <span class="email">{{user.email}}</span> </td>
+                            <td class="user-id" >{{user.id}}
+                            </td>
+                            <td class="action-links">
+                                <a  [routerLink]="['/user',   user.id ]"  class="edit"> <i class="linecons-pencil"></i> Edit Profile
+                                </a>
+                                <a href="javascript:void(0);"  (click)="deleteuser(user)" class="delete"> <i class="linecons-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul *ngIf="pagerOfficer.pages && pagerOfficer.pages.length" class="pagination" style="float:right;">
+                        <li [ngClass]="{disabled:pagerOfficer.currentPage === 1}">
+                            <a (click)="setPageOfficer(1)">First</a>
+                        </li>
+                        <li [ngClass]="{disabled:pagerOfficer.currentPage === 1}">
+                            <a (click)="setPageOfficer(pagerOfficer.currentPage - 1)">Previous</a>
+                        </li>
+                        <li *ngFor="let pageOfficer of pagerOfficer.pages" [ngClass]="{active:pagerOfficer.currentPage === pageOfficer}">
+                            <a (click)="setPageOfficer(pageOfficer)">{{pageOfficer}}</a>
+                        </li>
+                        <li [ngClass]="{disabled:pagerOfficer.currentPage === pagerOfficer.totalPages}">
+                            <a (click)="setPageOfficer(pagerOfficer.currentPage + 1)">Next</a>
+                        </li>
+                        <li [ngClass]="{disabled:pagerOfficer.currentPage === pagerOfficer.totalPages}">
+                            <a (click)="setPageOfficer(pagerOfficer.totalPages)">Last</a>
+                        </li>
+                    </ul>
+                <div class="row">
+                    <div class="col-sm-12 text-right text-center-sm">
+                        <ul uib-pagination boundary-links="true" total-items="officers.length" ng-model="vm.officerUser.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="vm.officerUser.limit" first-text="&laquo;" last-text="&raquo;"></ul>
+                    </div>
+                </div>
+            </div>
+
+           
+
+            <div class="tab-pane" id="Officemanager">
+                    <div class="row search-env">
+                            <form>
+                                <div class="col-sm-12 text-left">
+                                    <input class="form-control input-lg" type="text" placeholder="Search by Name" [(ngModel)]="userFilterOfficerManger" (keyup.enter)="SearchListUserOfficerManger(userFilterOfficerManger,0,0)" [ngModelOptions]="{standalone: true}">
+                                    <button type="submit" class="btn-unstyled" style="right: 15px;"> <i class="fa fa-search"></i> </button>
+                                </div>
+                            </form>
+                        </div>
+                <table class="table table-hover members-table middle-align">
+                    <thead>
+                        <tr>
+                            <th>Name and Role</th>
+                            <th>E-Mail</th>
+                            <th>ID</th>
+                            <th>Settings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of allItemsAdminofficerManger" >
+                       
+                            <td class="user-name"> 
+                                <i (click)="showUser(user)">
+                                    <a href="javascript:void(0);" class="name" style="text-transform: capitalize;">{{(user.first_name + ' ' + user.last_name)||user.username}}</a>
+                                    <span *ngIf="user.role_id == 1">Administrator</span> 
+                                    <span *ngIf="user.role_id == 2">Officer</span> 
+                                    <span *ngIf="user.role_id == 3">Office Manger</span> 
+                                    </i>
+                              </td>
+                            <td> <span class="email">{{user.email}}</span> </td>
+                            <td class="user-id" >{{user.id}}
+                            </td>
+                            <td class="action-links">
+                                <a [routerLink]="['/user',   user.id ]"  class="edit"> <i class="linecons-pencil"></i> Edit Profile
+                                </a>
+                                <a href="javascript:void(0);"  (click)="deleteuser(user)" class="delete"> <i class="linecons-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+<ul *ngIf="pagerOfficerManger.pages && pagerOfficerManger.pages.length" class="pagination" style="float:right;">
+        <li [ngClass]="{disabled:pagerOfficerManger.currentPage === 1}">
+            <a (click)="setPageOfficerManger(1)">First</a>
+        </li>
+        <li [ngClass]="{disabled:pagerOfficerManger.currentPage === 1}">
+            <a (click)="setPageOfficerManger(pagerOfficerManger.currentPage - 1)">Previous</a>
+        </li>
+        <li *ngFor="let pageOfficerManger of pagerOfficerManger.pages" [ngClass]="{active:pagerOfficerManger.currentPage === pageOfficerManger}">
+            <a (click)="setPageOfficerManger(pageOfficerManger)">{{pageOfficerManger}}</a>
+        </li>
+        <li [ngClass]="{disabled:pagerOfficerManger.currentPage === pagerOfficerManger.totalPages}">
+            <a (click)="setPageOfficerManger(pagerOfficerManger.currentPage + 1)">Next</a>
+        </li>
+        <li [ngClass]="{disabled:pagerOfficerManger.currentPage === pagerOfficerManger.totalPages}">
+            <a (click)="setPageOfficerManger(pagerOfficerManger.totalPages)">Last</a>
+        </li>
+    </ul>
+                <div class="row">
+                    <div class="col-sm-12 text-right text-center-sm">
+                        <ul uib-pagination boundary-links="true" total-items="admins.length" ng-model="vm.adminUser.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" items-per-page="vm.adminUser.limit" first-text="&laquo;" last-text="&raquo;"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<div id="userModal" class="modal fade" role="dialog" size="md" tabindex="-1" >
+    
+        
+<div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">User Info</h3>
+        </div>
+    
+<div class="modal-body" id="modal-body">
+    <section class="profile-env">
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <div class="user-info-sidebar">
+                    <a href="javascript:void(0);" class="user-img">
+                        <span class="user-image-initial" style="border: 5px solid rgba(230, 235, 236, 0.98);">
+                            <span class="image-init" style="color: #fff;" ></span>
+                        </span>
+                    </a>
+                    <a href="javascript:void(0);" class="user-name" style="text-transform: capitalize;">
+                        {{userData.first_name + ' ' + userData.last_name}}
+                    </a>
+                    <span class="user-title">
+                        <strong *ngIf="userData.role_id == 1" style="text-transform: capitalize;">Administrator</strong>
+                        <strong *ngIf="userData.role_id == 2" style="text-transform: capitalize;">Officer</strong>
+                        <strong *ngIf="userData.role_id == 3" style="text-transform: capitalize;">Office Managger</strong>
+                     </span>
+                    <hr>
+                    <ul class="list-unstyled user-info-list">
+                        <li> <i class="fa fa-envelope-o"></i> {{userData.email}}
+                        </li>
+                        <li> <i class="fa fa-phone"></i> {{userData.phone||'Not Provided'}} </li>
+                    </ul>
+                    <hr>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+                <section class="user-timeline-stories">
+                    <article class="timeline-story">
+                        <div>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="story-comment">
+                                        <div class="story-comment-content">
+                                            <a href="javascript:void(0);">Region</a>
+                                            <p>{{region_name||'Not defined'}}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                               <li>
+                                    <div class="story-comment">
+                                        <div class="story-comment-content">
+                                            <a href="javascript:void(0);">Last Login</a>
+                                            <p>{{userData.last_login}}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                 
+                            </ul>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </div>
+    </section>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="btn btn-secondary" onclick="$('#userModal').modal('hide');">OK</button>
+   
+</div>
+
+</div>
+
+    
+</div>

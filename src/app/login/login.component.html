@@ -1,0 +1,40 @@
+﻿<div class="page-container"> 
+    <div class="page-container ng-scope">
+        <div class="page-container ng-scope">
+            <div class="login-container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <form class="login-form fade-in-effect in" novalidate="novalidate">
+                            <div class="login-header">
+                                <a href="#/app/dashboard-variant-1" class="logo">
+                                    <img src="assets/img/whitethumb.png" style="width:300px; margin-right: 15px;vertical-align: middle" alt="">
+                                </a>
+                            </div>
+                            <div>
+                                <p>Dear user, log in to access the app!</p>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-dark" name="username" id="username" autocomplete="off" type="text" placeholder="Username"
+                                    [(ngModel)]="userName">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-dark" name="passwd" id="passwd" autocomplete="off" type="password" placeholder="Password"
+                                    [(ngModel)]="password">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-dark btn-block text-left" (click)="login()">
+                                    <i class="fa-lock">
+                                    </i> Log In</button>
+                            </div>
+                            <div class="login-footer">
+                                <div class="info-links">
+                                    <a target="_blank" [routerLink]="['/termsconditions']">Terms & Conditions</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

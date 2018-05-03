@@ -1,0 +1,119 @@
+<style>
+    a {
+        cursor: pointer;
+    }
+</style>
+
+<div class="page-title ng-scope">
+    <div class="title-env">
+        <h1 class="title">Case List</h1>
+        <p class="description">Manage your cases.</p>
+    </div>
+    <div class="breadcrumb-env">
+        <ol class="breadcrumb bc-1">
+            <li>
+                <a ui-sref="app.officerDashboard" [routerLink]="['/officerdashboard']">
+                    <i class="fa-home"></i>Dashboard</a>
+            </li>
+            <li class="active">
+                <strong>Case List</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row ng-scope">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">All Cases</h3>
+            </div>
+            <div class="panel-body">
+
+
+
+
+                <div class="row search-env">
+                    <form class="ng-pristine ng-valid">
+                        <div class="col-sm-12 text-left">
+
+                            <input class="form-control input-lg" type="text" placeholder="Search by Name" name="search" [(ngModel)]="usercaselistFilter" (keyup.enter)="searchCase(userFilter,0,0)"
+                                [ngModelOptions]="{standalone: true}">
+                            <button type="submit" class="btn-unstyled" style="right: 15px">
+                                <i class="fa fa-search" (click)="searchCase(usercaselistFilter,0,0)"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+
+
+
+
+
+
+                <div class="row" style="margin: 0">
+
+
+                    <table class="table table-hover members-table middle-align">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Case Name</th>
+                                <th>Case Created</th>
+                                <th>Case Number</th>
+                                <th>Settings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let case of allcaselistItems">
+
+                                <td style="width: 5%;">
+                                                                      <img class="product-img imgback" (click)="casedeatilsview(case)" src="{{domainConfigUrl}}Data/cases/{{case.id}}{{case.photograph}}"
+                                        class="img-circle" alt="user-pic" style="width: 50px !important;height: 50px !important;">
+                                </td>
+                                <td (click)="casedeatilsview(case)" style="color: #2c2e2f;font-size: 14px;">
+
+                                    <strong>{{case.first_name}} {{case.last_name}} </strong>
+                                    <br>
+                                    <span>{{case._id}}</span>
+
+                                </td>
+                                <td>{{case.createdon | date:'MM-dd-yyyy HH:mm'}}</td>                           
+                                <td>{{case.case_number}}</td>
+                                <td style="Color:#FFA400!important;cursor:pointer;" (click)="caseview(case.id)">Edit Case</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 text-right text-center-sm">
+
+
+                        <ul *ngIf="pagercaselist.pages && pagercaselist.pages.length" class="pagination" style="float:right;">
+                            <li [ngClass]="{disabled:pagercaselist.currentPage === 1}">
+                                <a (click)="setcaselistPage(1)">First</a>
+                            </li>
+                            <li [ngClass]="{disabled:pagercaselist.currentPage === 1}">
+                                <a (click)="setcaselistPage(pagercaselist.currentPage - 1)">Previous</a>
+                            </li>
+                            <li *ngFor="let page of pagercaselist.pages" [ngClass]="{active:pagercaselist.currentPage === page}">
+                                <a (click)="setcaselistPage(page)">{{page}}</a>
+                            </li>
+                            <li [ngClass]="{disabled:pagercaselist.currentPage === pagercaselist.totalPages}">
+                                <a (click)="setcaselistPage(pagercaselist.currentPage + 1)">Next</a>
+                            </li>
+                            <li [ngClass]="{disabled:pagercaselist.currentPage === pagercaselist.totalPages}">
+                                <a (click)="setcaselistPage(pagercaselist.totalPages)">Last</a>
+                            </li>
+                        </ul>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

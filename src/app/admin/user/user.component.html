@@ -1,0 +1,95 @@
+<div class="page-title ng-scope">
+    <div class="title-env">
+        <h1 class="title ng-binding">Add User</h1>
+        <p class="description ng-binding">Add a new User</p>
+    </div>
+    <div class="breadcrumb-env">
+        <ol class="breadcrumb bc-1">
+            <!-- <li>
+                <a ui-sref="app.officerDashboard" href="#!/officer-dashboard">
+                    <i class="fa-home"></i>Dashboard</a>
+            </li> -->
+            <li class="active">
+                <strong class="ng-binding">Add User</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="row ng-scope">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">User Data</h3>
+        </div>
+        <div class="panel-body">
+          <form method="POST" (ngSubmit)="userForm.form.valid && onSubmit(userForm.form)" #userForm="ngForm" class="form-horizontal" accept-charset="utf-8">
+            
+              <div class="form-group">
+                <label class="col-sm-2 control-label required" for="firstName">First Name</label>
+                <div class="col-sm-4">
+                  <input [(ngModel)]="user.first_name" name="first_name" #first_name="ngModel" class="form-control" id="firstName" placeholder="First Name" required="" type="text">
+                </div>
+                <label class="col-sm-2 control-label required" for="lastName">Last Name</label>
+                <div class="col-sm-4">
+                  <input  class="form-control" [(ngModel)]="user.last_name" name="last_name" #last_name="ngModel" id="lastName" placeholder="Last Name" required="" type="text"></div>
+              </div>
+              <div class="form-group-separator"></div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label required" for="username">User Name</label>
+                <div class="col-sm-4">
+                  <input  class="form-control" minlength="5" id="username" [disabled]= "isEdit" [(ngModel)]="user.username" name="username" #username="ngModel" placeholder="User Name" required="" type="text">
+                </div>
+                <label class="col-sm-2 control-label required" for="email">Email</label>
+                <div class="col-sm-4">
+                  <input  class="form-control" [(ngModel)]="user.email" name="email" #email="ngModel" id="email" placeholder="Email" required="" type="email"></div>
+              </div>
+              <div class="form-group-separator"></div>
+            
+              <div class="form-group ng-scope" [hidden]="isEdit" >
+                <label class="col-sm-2 control-label required" for="password">Password</label>
+                <div class="col-sm-4">
+                  <input  class="form-control" [(ngModel)]="user.password" name="password" #password="ngModel" id="password" placeholder="Password" required="{{!isEdit}}" type="password">
+                </div>
+                <label class="col-sm-2 control-label required" for="retype">Re-Type Password</label>
+                <div class="col-sm-4">
+                  <input  class="form-control"  [(ngModel)]="user.retype" name="retype" #retype="ngModel" id="retype" placeholder="Re-type Password" required="{{!isEdit}}" type="password">
+                </div>
+              </div>
+             
+              <div class="form-group-separator ng-scope" ></div> 
+              <div class="form-group">
+                <label class="col-sm-2 control-label required" for="role">Role</label>
+                <div class="col-sm-4">
+                  
+                    <select class="form-control" [(ngModel)]="user.role_id" [disabled]="isEdit" name="role_id" #role_id="ngModel" required="">
+                        <option *ngFor="let r of roles" [ngValue]="r.id">{{r.desc}}</option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label required" for="phone">Phone</label>
+                <div class="col-sm-4">
+                  <input  class="form-control" required="" maxlength="10" [(ngModel)]="user.phone" name="phone" #phone="ngModel" id="phone" placeholder="Phone" type="tel">
+                </div>
+              </div>
+              <div class="form-group-separator"></div>
+              <div class="form-group" [hidden]="user.role_id == 1">
+                <label class="col-sm-2 control-label required" for="role">Region</label>
+                <div class="col-sm-4">
+                    
+                    <select class="form-control" [required]="user.role_id!=1"  [(ngModel)]="user.region_id" name="region_id" #region_id="ngModel" >
+                      <option *ngFor="let reg of regions" [ngValue]="reg.id">{{reg.desc}}</option>
+                    </select>
+                </div>
+              </div>
+              <div class="form-group-separator"></div>
+              <div class="form-group">
+                <div class="col-sm-12 text-right">
+      
+                  <button type="button" class="btn btn-white"  [routerLink]="['/userdetails']" >Cancel</button> 
+                  <button type="submit" class="btn btn-secondary" [disabled]="!userForm.form.valid" >{{operation_type}}</button>
+              </div>
+              </div>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>

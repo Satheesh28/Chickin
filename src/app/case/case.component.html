@@ -1,0 +1,373 @@
+<style>
+	.cursorpointer {
+		cursor: pointer;
+	}
+
+	.has-error .form-control {
+		border-color: rgba(204, 63, 68, .4);
+		-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075)
+	}
+
+	.has-error .control-label {
+		color: #cc3f44;
+	}
+
+	.dateerror {
+		border-color: rgba(204, 63, 68, .4);
+	}
+
+	.datelabelerror {
+		color: #cc3f44;
+	}
+</style>
+<div class="page-title ng-scope">
+	<div class="title-env">
+		<h1 class="title ng-binding">Add Case</h1>
+		<p class="description ng-binding">Add a new Case</p>
+	</div>
+	<div class="breadcrumb-env">
+		<ol class="breadcrumb bc-1">
+			<li>
+				<a ui-sref="app.officerDashboard" [routerLink]="['/officerdashboard']">
+					<i class="fa-home"></i>Dashboard</a>
+			</li>
+			<li class="active">
+				<strong class="ng-binding">Add Case</strong>
+			</li>
+		</ol>
+	</div>
+</div>
+<div class="row ng-scope">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Case Data</h3>
+			</div>
+			<div class="panel-body">
+				<form role="form" #form="ngForm" name="form" #case="ngForm" novalidate="" class="form-horizontal" accept-charset="utf-8">
+					<div class="form-group">
+						<div [ngClass]="{ 'has-error': firstname.invalid }">
+							<label class="col-sm-2 col-xs-4 control-label required" for="firstName">First Name</label>
+							<div class="col-sm-2 col-xs-8">
+								<input type="text" class="form-control" placeholder="First Name" name="firstname" id="firstname" [(ngModel)]="first_name"
+								 #firstname="ngModel" required>
+
+							</div>
+						</div>
+						<label class="col-sm-2 col-xs-4 control-label" for="middleName">Middle Name</label>
+						<div class="col-sm-2 col-xs-8">
+							<input type="text" [(ngModel)]="middle_name" name="middle_name" id="middle_name" class="form-control" id="middleName" placeholder="Middle Name">
+						</div>
+						<div [ngClass]="{ 'has-error': lastname.invalid }">
+							<label class="col-sm-2 col-xs-4 control-label required" for="lastName">Last Name</label>
+							<div class="col-sm-2 col-xs-8">
+								<input type="text" class="form-control" [(ngModel)]="last_name" name="lastname" id="lastname" placeholder="Last Name" #lastname="ngModel"
+								 required>
+							</div>
+						</div>
+					</div>
+					<div class="form-group-separator"></div>
+					<div class="form-group">
+						<label class="col-sm-2 col-xs-4 control-label required" for="picture">Picture</label>
+						<div class="col-sm-4 col-xs-8">
+							<label class="" aria-hidden="true">
+								<!--<img class="title-img2 cursorpointer"  id="userphoto" ng-model="userphoto">-->
+								<input type="file" accept=".png, .jpg, .jpeg" style="display:none;" (change)="onFileChange($event)" />
+								<img [src]="sanitizer.bypassSecurityTrustUrl(imagePreview)" class="rounded" style="height:50px;width:50px;" required>
+								<span>{{ImageFileName}}</span>
+							</label>
+							<a href="javascript:void(0);" class="user-name"></a>
+						</div>
+						<label class="col-sm-2 col-xs-4 control-label" for="region">Region</label>
+						<div class="col-sm-4 col-xs-8">
+							<select class="form-control" id="region_id" name="region_id" [(ngModel)]="region_id" disabled required>
+								<option selected="" value="undefined">-- Select Region -- </option>
+								<option *ngFor="let region of RegionList" [ngValue]="region.id" style="margin-top:5px;">
+									{{region.desc}}
+								</option>
+
+							</select>
+						</div>
+						<div *ngIf="role_id == 3" style="margin-top: 2%;">
+							<label class="col-sm-2 col-xs-4 control-label required" style="margin-top: 2%;" for="region">AssignedTo</label>
+							<div class="col-sm-4 col-xs-8" style="margin-top: 2%;">
+								<select class="form-control" id="roleuserid" name="roleuserid" [(ngModel)]="roleuserid" required>
+									<option selected="" value="undefined">-- Select User -- </option>
+									<option *ngFor="let role of UserroleList" [ngValue]="role.id" style="margin-top:5px;">
+										{{role.username}}
+
+									</option>
+
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="form-group-separator"></div>
+
+					<div class="form-group">
+						<label id="datelabelerror" class="col-sm-2 col-xs-4 control-label datelabelerror required" for="caseDate">Court Date</label>
+
+						<div class="col-sm-4 col-xs-8">
+							<div class="input-group">
+								<input class="form-control dateerror" id="datepicker" style="float:none;" (click)="dp.toggleCalendar()" onkeydown="return false"
+								 placeholder="Select a date" ngx-mydatepicker name="mydate" [(ngModel)]="casedate" [options]="myOptions" #dp="ngx-mydatepicker"
+								 (dateChanged)="onDateChanged($event)" required />
+
+								<span id="datelabelerror" class="input-group-btn">
+
+									<button type="button" class="btn btn-default" (click)="dp.toggleCalendar()">
+										<i class="fa fa-calendar glyphicon"></i>
+									</button>
+								</span>
+							</div>
+
+						</div>
+
+						<div [ngClass]="{ 'has-error': casenumber.invalid }">
+							<label class="col-sm-2 col-xs-4 control-label required" for="caseNum">case Number</label>
+							<div class="col-sm-4 col-xs-8">
+								<input type="text" [(ngModel)]="case_number" name="casenumber" class="form-control" id="casenumber" #casenumber="ngModel"
+								 placeholder="Case Number" required>
+							</div>
+						</div>
+
+					</div>
+					<div class="form-group-separator"></div>
+					<div class="form-group">
+						<label id="datelabelerrorr" class="col-sm-2 col-xs-4 control-label required datelabelerror" for="recRange">Recurring Range</label>
+						<div class="col-sm-4 col-xs-4">
+							<input id="rangepicker" name="rangepicker" [disabled]="recurringdate" onkeydown="return false" class="form-control date-picker dateerror"
+							 type="text" required>
+						</div>
+						<div [ngClass]="{ 'has-error': recurringfrequency.invalid }">
+							<label class="col-sm-2 col-xs-4 control-label required" for="recFreq">Recurring Frequency</label>
+							<div class="col-sm-4 col-xs-8">
+								<select class="form-control" name="recurringfrequency" id="recurringfrequency" #recurringfrequency="ngModel" [disabled]="recurringdate"
+								 (change)="getInfoForDateGeneration($event.target.value)" [(ngModel)]="recurringFrequency" required>
+									<option selected="" value="undefined">-- Select Frequency-- </option>
+									<option label="daily" value="daily">daily</option>
+									<option label="weekly" value="weekly">weekly</option>
+									<option label="monthly" value="monthly">monthly</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="form-group-separator"></div>
+					<div class="form-group" *ngIf="caseFlag">
+						<label class="col-sm-2 col-xs-4 control-label" for="idts">Case Dates</label>
+						<div class="">
+							<div class="col-sm-4 col-xs-4">
+								<p>Date</p>
+								<div *ngFor="let case of randomDateArray">
+									<span class="random-dates" style="width:50%;">{{case.duedate | date:'MM-dd-yyyy HH:mm'}}</span>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+					<div class="form-group">
+
+						<label class="col-md-2 control-label" for="idts">Case Conditions</label>
+						<div _ngcontent-c3="" class="col-md-12 text-right">
+							<button class="col-sm-2" type="button" class="btn btn-primary" (click)="addnewCase()">Add new Condition</button>
+						</div>
+						<div class="row" style="margin-bottom:5px;" *ngFor="let c of caseConditionArray;index as i;">
+							<div class="col-sm-2"></div>
+							<div class="col-sm-8">
+
+								<textarea type="text" name="select" attr.id="select{{i}}" attr.name="select{{i}}" [value]="c.desc" rows="2" (change)="select_condition($event.target.value,i)"
+								 (keyup)="completeSelect(i,$event.target.value)" class="form-control"></textarea>
+								<ul style=" border: 1px solid #ddd;" class="list-group autolist" *ngIf="case_postiton ==i">
+									<li style="border: 1px solid #fff;padding: 5px 20px;" class="list-group-item" *ngFor="let questiondata of search_case" (click)="addcondition(i,questiondata)">{{questiondata}}</li>
+								</ul>
+							</div>
+
+							<button class="col-sm-2" type="button" class="btn btn-danger" (click)="removeCase(i)">Remove</button>
+						</div>
+					</div>
+
+
+					<div class="form-group-separator"></div>
+					<div class="form-group">
+						<label class="col-sm-2 col-xs-4 control-label" for="idts">Domain Section</label>
+						<div class="col-sm-10 col-xs-8">
+							<div active="activePill" type="pills" class="ng-isolate-scope">
+								<ul class="nav nav-pills cursorpointer">
+
+									<li *ngFor="let tab of tabs" attr.id="{{tab.name}}" (click)="Questiondata(tab.name,tab.cat,tab.domain_id)" class="uib-tab nav-item"
+									 heading="{{tab.name}}">
+										<a class="nav-link ng-binding" uib-tab-heading-transclude="">{{tab.name}}</a>
+									</li>
+
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane ng-scope active" uib-tab-content-transclude="tab">
+										<div class="row ng-scope">
+											<div class="col-md-12 text-right">
+												<button type="button" class="btn btn-primary" (click)="Workquestion()">Add new Question</button>
+											</div>
+										</div>
+										<div *ngIf="workstatus">
+											<div class="row ng-scope">
+												<div class="col-md-8 text-bold">Question</div>
+												<div class="col-md-4 text-bold">Score (1 to 10)
+												</div>
+											</div>
+										</div>
+
+
+										<div class="row" *ngFor="let data of QuestionData; index as i;">
+											<div *ngIf="data.domain_id == domainid">
+												<div class="col-md-6">
+													<div class="form-group" style="padding-right: 5%;margin-left: 0.5%;margin-top: 2%;">
+														<input type="text" name="question" attr.id="question{{i}}" attr.name="question{{i}}" [value]="data.desc" attr.id="question{{i}}"
+														 (change)="workchange1($event.target.value,i)" (keyup)="complete($event.target.value,i)" class="form-control"
+														/>
+
+														<ul style=" border: 1px solid #ddd;" class="list-group autolist" attr.id="question{{i}}" *ngIf="position == i">
+															<li style="border: 1px solid #fff;padding: 5px 20px;" class="list-group-item" *ngFor="let countrydata of filterCountry" (click)="workchange(i,countrydata.desc,countrydata.score)">{{countrydata.desc}}</li>
+														</ul>
+													</div>
+
+												</div>
+												<div class="col-md-4">
+													<div class="form-group" style="padding-right: 5%;margin-left: 1%;margin-top: 4%;">
+														<input type="number" name="score" class="form-control" [value]="data.score" (change)="workscore(i,$event.target.value)">
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="form-group" style="padding-right: 5%;margin-left: 1%;margin-top: 4%;">
+														<button type="button" class="btn btn-danger" (click)="deletequestion(i)" style="width:80px;">Remove</button>
+													</div>
+												</div>
+
+											</div>
+
+										</div>
+									</div>
+
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group-separator"></div>
+					<div class="form-group">
+						<label class="col-sm-2 col-xs-4 control-label" for="idts">Identification type and number</label>
+						<div class="col-sm-10 col-xs-8">
+							<div class="ui-select-container selectize-control multi plugin-remove_button ng-empty ng-valid" ng-class="{'open': $select.open}"
+							 tagging="" tagging-label="false" theme="selectize" sortable="true" style="width: 100%" title="Add some identification">
+								<div class="selectize-input" ng-class="{'focus': $select.open, 'disabled': $select.disabled, 'selectize-focus' : $select.focus}">
+									<input type="search" autocomplete="off" tabindex="-1" class="ui-select-search ng-pristine ng-untouched ng-valid ng-empty"
+									 name="identification_num" id="identification_num" placeholder="Add identification" [(ngModel)]="identification_num"
+									 aria-expanded="false" aria-label="Add some identification" ondrop="return false;" style="width: 761px;" aria-activedescendant="ui-select-choices-row-1--1">
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+					<div class="form-group-separator"></div>
+					<div class="form-group">
+						<label class="col-sm-2 col-xs-3 control-label">Access Code</label>
+						<div class="col-sm-6 col-xs-5">
+							<input type="text" name="aacccode" class="form-control" placeholder="Access Code" [(ngModel)]="access_code" disabled>
+						</div>
+						<div class="col-sm-4 col-xs-4">
+							<a class="btn btn-primary ng-binding" (click)="generateCode()" href="javascript:void(0);">Generate</a>
+						</div>
+					</div>
+					<div class="form-group-separator"></div>
+					<div class="form-group">
+						<label class="col-sm-2 col-xs-4 control-label">Phone</label>
+						<div class="col-sm-10 col-xs-8" style="padding-top: 8px">
+
+							<div class="row" *ngFor="let data of PhoneData; index as i;">
+								<div class="col-sm-10">
+									<div class="row">
+										<label class="col-sm-2 text-right" style="line-height: 2" for="phn_0">Number</label>
+										<div class="col-sm-4">
+											<input type="text" attr.name="number{{i}}" (keypress)="onlyNumberKey($event)" [value]="data.number" attr.id="number{{i}}"
+											 class="form-control" placeholder="Phone number" (change)="phonechange(i,$event.target.value)">
+										</div>
+										<label class="col-sm-2 text-right" style="line-height: 2" for="phn_type_0">Type</label>
+										<div class="col-sm-4 col-xs-8">
+											<select attr.name="PhoneType{{i}}" attr.id="PhoneType{{i}}" [attr.selected]="data.phoneType" class="form-control" (change)="phonetypechange(i,$event.target.value)">
+												<option value="undefined"> </option>
+												<option [selected]="data.phoneType=='Cell'" label="Cell" value="Cell">Cell</option>
+												<option [selected]="data.phoneType=='Home'" label="Home" value="Home">Home</option>
+												<option [selected]="data.phoneType=='Office'" label="Office" value="Office">Office</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2 text-center">
+
+									<button type="button" class="btn btn-primary" (click)="addNewPhone()" style="width:80px" *ngIf="i==0">Add New</button>
+									<button type="button" class="btn btn-danger" (click)="deletePhone(i)" style="width:80px;" *ngIf="i!=0">Delete</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group-separator"></div>
+					<div class="form-group">
+						<label class="col-sm-2 col-xs-4 control-label">Address</label>
+						<div class="col-sm-10 col-xs-8">
+							<div class="row" *ngFor="let data of AddressData; index as i;">
+								<div class="col-sm-10" style="margin-top: 1%;">
+									<div class="row">
+										<label class="col-sm-2 text-right" style="line-height: 2" for="add_lin_1_0">Address Line 1</label>
+										<div class="col-sm-4">
+											<input type="text" attr.name="addressline1{{i}}" [value]="data.addressline1" (input)="addressline1=$event.target.value" attr.id="addressline1{{i}}"
+											 class="form-control" placeholder="Address Line 1" (change)=addressline1change(i,$event.target.value)>
+										</div>
+										<label class="col-sm-2 text-right" style="line-height: 2" for="add_line_two_0">Address Line 2</label>
+										<div class="col-sm-4">
+											<input type="text" attr.name="addressline2{{i}}" [value]="data.addressline2" (input)="addressline1=$event.target.value" attr.id="addressline2{{i}}"
+											 class="form-control" placeholder="Address Line 2" (change)=addressline2change(i,$event.target.value)>
+										</div>
+									</div>
+									<div class="row" style="margin-top:1%">
+										<label class="col-sm-2 text-right" style="line-height: 2" for="city_0">City</label>
+										<div class="col-sm-2">
+											<input type="text" attr.name="city{{i}}" [value]="data.city" (input)="addressline1=$event.target.value" attr.id="city{{i}}"
+											 class="form-control" placeholder="Enter city name" (change)=citychange(i,$event.target.value)>
+										</div>
+										<label class="col-sm-2 text-right" style="line-height: 2" for="state_0">State</label>
+										<div class="col-sm-2">
+											<input type="text" attr.name="state{{i}}" [value]="data.state" (input)="addressline1=$event.target.value" attr.id="state{{i}}"
+											 class="form-control" placeholder="Enter state" (change)=statechange(i,$event.target.value)>
+										</div>
+										<label class="col-sm-2 text-right" style="line-height: 2" for="zip_0">Zip</label>
+										<div class="col-sm-2">
+											<input type="text" (keypress)="onlyNumberKey($event)" attr.name="zipcode{{i}}" [value]="data.zipcode" (input)="addressline1=$event.target.value"
+											 attr.id="zipcode{{i}}" class="form-control" placeholder="Enter zip code" (change)=zipcodechange(i,$event.target.value)>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2 text-center">
+									<button type="button" class="btn btn-primary ng-scope" (click)="addNewAddress()" style="width:80px" *ngIf="i==0">Add New</button>
+									<button type="button" class="btn btn-danger" (click)="deleteAddress(i)" style="width:80px" *ngIf="i!=0">Delete</button>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="form-group-separator"></div>
+					<div class="form-group">
+						<div class="col-sm-12 text-right">
+							<button type="button" class="btn btn-white">
+								<a [routerLink]="['/casehistory']">
+									Cancel</a>
+							</button>
+							<button type="submit" class="btn btn-secondary ng-binding" [disabled]="case.form.invalid || !ImageUpload || !CaseDateSelect"
+							 (click)="savecase()">{{savebutton}}</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

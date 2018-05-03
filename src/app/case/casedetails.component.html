@@ -1,0 +1,376 @@
+<style>
+    a {
+        cursor: pointer;
+    }
+
+    agm-map {
+        height: 300px;
+    }
+</style>
+<div class="page-title ng-scope">
+    <div class="title-env">
+        <h1 class="title">Case Details</h1>
+        <p class="description">All info about the case.</p>
+    </div>
+    <div class="breadcrumb-env">
+        <ol class="breadcrumb bc-1">
+            <li>
+                <a ui-sref="app.officerDashboard" [routerLink]="['/officerdashboard']">
+                    <i class="fa-home"></i>Dashboard</a>
+            </li>
+            <li>
+                <a ui-sref="app.officerCaseList" [routerLink]="['/casehistory']">
+                    <i class="fa fa-list-alt"></i>Cases List</a>
+            </li>
+            <li class="active">
+                <strong>Case Details</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="profile-env ng-scope">
+    <div class="row">
+        <div class="col-sm-3">
+
+            <div class="user-info-sidebar">
+                <div class="user-img">
+                    <img src="{{logo}}" class="img-responsive img-thumbnail" style="width: 150px; height: 150px">
+                    <a href="javascript:void(0);" class="user-name ng-binding" style="text-transform: capitalize"></a>
+                    <hr>
+                </div>
+                <hr>
+            </div>
+
+            <div class="user-info-sidebar">
+                <a href="#"></a>
+                <a href="javascript:void(0);" class="user-name ng-binding">{{first_name}} {{last_name}}</a>
+                <span class="user-title">Case Number
+                    <strong class="ng-binding">{{case_number}}</strong>
+                </span>
+                <hr>
+                <ul class="list-unstyled user-info-list">
+                    <li class="ng-binding">
+                        <i class="fa fa-calendar"></i> {{case_date | date:'mediumDate'}}</li>
+                  
+                </ul>
+                <hr>
+                <a type="button" class="btn btn-success btn-block text-left" (click)="case(case_id)">
+                    <span>Edit</span>
+                    <i class="fa fa-pencil-square-o pull-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Address</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row ng-scope" *ngFor="let address of AddressData">
+                                <div class="col-sm-12">
+                                    <div class="row margin-bottom-10">
+                                        <div class="col-sm-3 font-disp">Address Line 1 :</div>
+                                        <div class="col-sm-9 font-disp-2 ng-binding">{{address.addressline1}}</div>
+                                    </div>
+                                    <div class="row margin-bottom-10">
+                                        <div class="col-sm-3 font-disp">Address Line 2 :</div>
+                                        <div class="col-sm-9 font-disp-2 ng-binding">{{address.addressline2}}</div>
+                                    </div>
+                                    <div class="row margin-bottom-10">
+                                        <div class="font-disp label-style display-inline-block">City :</div>
+                                        <div class="font-disp-2 style-value display-inline-block ng-binding">{{address.city}}</div>
+                                        <div class="font-disp label-style display-inline-block">State :</div>
+                                        <div class="font-disp-2 style-value display-inline-block ng-binding">{{address.state}}</div>
+                                        <div class="font-disp label-style display-inline-block">Zip :</div>
+                                        <div class="font-disp-2 style-value display-inline-block ng-binding">{{address.zipcode}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Phone</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row ng-scope" *ngFor="let phone of PhoneData">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-2 font-disp">Phone Number :</div>
+                                        <div class="col-sm-4 font-disp-2 ng-binding">{{phone.number | slice:2:phone.number.length}}</div>
+                                        <div class="col-sm-2 font-disp">Type :</div>
+                                        <div class="col-sm-4 font-disp-2 ng-binding">Cell</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Recurring Details</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-2 font-disp">Start Date</div>
+                                <div class="col-sm-2 font-disp-2 ng-binding">{{recurring_startdate | date: 'MMM/dd/yyyy'}}</div>
+                                <div class="col-sm-2 font-disp">End Date</div>
+                                <div class="col-sm-2 font-disp-2 ng-binding">{{recurring_enddate | date: 'MMM/dd/yyyy'}}</div>
+                                <div class="col-sm-2 font-disp">Frequency</div>
+                                <div class="col-sm-2 font-disp-2 ng-binding" style="text-transform: capitalize">{{recurringFrequency}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">CheckIn Date and Time</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div *ngFor="let checkindate of randomDateArray" class="ng-scope">
+                                <span class="display-date font-disp-2 ng-binding">{{checkindate.duedate | date:'MM-dd-yyyy HH:mm'}}</span>
+                               
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Conditions</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row" style="padding: 0 10px">
+                                                <div style="word-wrap: break-word;
+                    background: #0e62c7;
+                    color: #fff;    
+                    width: auto;
+                    word-break: break-all;
+                    line-height: 1.5" *ngFor="let condtion of caseCondition" class="ng-scope">
+                                                    <div class="ng-binding" style="padding: 5px 10px; margin: 5px; font-size: 14px; text-transform: capitalize">{{condtion.desc}}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Identifications</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row" style="padding: 0 10px">
+
+                                                <div class="col-sm-12 text-danger ng-scope">{{identification_num}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">CheckIn History</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row" style="padding: 0 10px">
+                                                <div>
+                                                    <table class="identification-table border-table export-table" id="reportTable">
+                                                        <tbody>
+                                                            <tr class="border-table">
+                                                                <th class="border-table text-center">Date</th>
+                                                                <th class="border-table text-center">Picture</th>
+                                                                <th class="border-table text-center">Conditions</th>
+                                                                <th class="border-table text-center">Map</th>
+                                                            </tr>
+                                                            <tr class="border-table" *ngFor="let data of allItemscheckin">
+                                                                <td class="border-table date-history">{{data.createdon | date:'MM-dd-yyyy' }}</td>
+                                                                <td class="border-table history-image">
+
+                                                                    <img src="{{domainConfigUrl}}Data/cases/{{data.case_id}}{{data.photo}}" alt="Case image" class="img-dimension">
+                                                                </td>
+                                                                <td>
+                                                                    <strong>{{(data.comment)}} </strong>
+                                                                </td>
+
+
+                                                                <td class="border-table" style="text-align: center;">
+                                                                    <i class="fa fa-map" style="font-size:20px;color:#111;padding-bottom: 10px;" aria-hidden="true"></i>
+                                                                    <button class="map-ind-view" (click)="checkinview(data)" data-toggle="modal" data-target="#ModalEmoji">View Map</button>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-sm-12 text-right text-center-sm">
+
+                                                        <ul *ngIf="pagercheckin.pages && pagercheckin.pages.length" class="pagination" style="float:right;">
+                                                            <li [ngClass]="{disabled:pagercheckin.currentPage === 1}">
+                                                                <a (click)="setcheckinPage(1)">First</a>
+                                                            </li>
+                                                            <li [ngClass]="{disabled:pagercheckin.currentPage === 1}">
+                                                                <a (click)="setcheckinPage(pagercheckin.currentPage - 1)">Previous</a>
+                                                            </li>
+                                                            <li *ngFor="let page of pagercheckin.pages" [ngClass]="{active:pagercheckin.currentPage === page}">
+                                                                <a (click)="setcheckinPage(page)">{{page}}</a>
+                                                            </li>
+                                                            <li [ngClass]="{disabled:pagercheckin.currentPage === pagercheckin.totalPages}">
+                                                                <a (click)="setcheckinPage(pagercheckin.currentPage + 1)">Next</a>
+                                                            </li>
+                                                            <li [ngClass]="{disabled:pagercheckin.currentPage === pagercheckin.totalPages}">
+                                                                <a (click)="setcheckinPage(pagercheckin.totalPages)">Last</a>
+                                                            </li>
+                                                        </ul>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Alert History</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row" style="padding: 0 10px">
+                                                <div>
+                                                    <table class="identification-table border-table export-table" id="reportTable">
+                                                        <tbody>
+                                                            <tr class="border-table">
+                                                                <td class="border-table text-center" style="width: 50%;">Location</td>
+                                                                <td class="border-table text-center">Media</td>
+                                                            </tr>
+                                                            <!-- ngRepeat: alert in vm.alerts -->
+                                                            <tr class="border-table" *ngFor="let alert of allhelpItems">
+
+                                                                <td class="border-table" style="text-align: center;">
+                                                                    <i class="fa fa-map" style="font-size:20px;color:#111;padding-bottom: 10px;" aria-hidden="true"></i>
+                                                                    <button class="map-ind-view" (click)="ViewMap(alert)" data-toggle="modal" data-target="#ModalEmoji">View Map</button>
+                                                                </td>
+                                                                <td class="border-table date-history">
+                                                                    <audio controls="controls" autobuffer="autobuffer">
+                                                                        <source type="audio/mp3" src="{{domainConfigUrl}}Data/cases/{{alert.case_id}}{{alert.audio}}">
+
+                                                                    </audio>
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <ul *ngIf="pagerhelp.pages && pagerhelp.pages.length" class="pagination" style="float:right;">
+                                                    <li [ngClass]="{disabled:pagerhelp.currentPage === 1}">
+                                                        <a (click)="sethelpPage(1)">First</a>
+                                                    </li>
+                                                    <li [ngClass]="{disabled:pagerhelp.currentPage === 1}">
+                                                        <a (click)="sethelpPage(pagerhelp.currentPage - 1)">Previous</a>
+                                                    </li>
+                                                    <li *ngFor="let page of pagerhelp.pages" [ngClass]="{active:pagerhelp.currentPage === page}">
+                                                        <a (click)="sethelpPage(page)">{{page}}</a>
+                                                    </li>
+                                                    <li [ngClass]="{disabled:pagerhelp.currentPage === pagerhelp.totalPages}">
+                                                        <a (click)="sethelpPage(pagerhelp.currentPage + 1)">Next</a>
+                                                    </li>
+                                                    <li [ngClass]="{disabled:pagerhelp.currentPage === pagerhelp.totalPages}">
+                                                        <a (click)="sethelpPage(pagerhelp.totalPages)">Last</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="ModalEmoji" class="modal" role="dialog" size="md" tabindex="-1">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content" style="width:85%;">
+                                            <div class="modal-header">
+
+                                                <h3 class="modal-title" id="modal-title">{{Maptitle}}
+                                                    <span>{{emotion_type}}</span>
+                                                    <span>{{username}}</span>
+                                                    <span>{{date | date:'MM/dd' }}</span>
+                                                </h3>
+
+                                            </div>
+                                            <div class="modal-body">
+                                                <section class="profile-env">
+                                                    <div class="row">
+                                                        <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [streetView]="true" [scrollwheel]="true" [zoomControl]="true">
+                                                            <agm-marker [latitude]="lat" [longitude]="lng">
+
+                                                                <agm-info-window>
+                                                                    <strong>{{mapdate | date:'MM-dd-yyyy hh:mm'}}</strong>
+                                                                </agm-info-window>
+                                                            </agm-marker>
+                                                        </agm-map>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                            <div class="modal-footer" style="text-align:left">
+
+                                                <span style="font-size: 16px;">{{comment}}</span>
+
+                                                <div style="float: right;padding-top: 5%;">
+
+                                                    <button class="btn btn-primary" type="btn btn-secondary" data-dismiss="modal">OK</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div id="ModalMultiple" class="modal" role="dialog" size="md" tabindex="-1">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content" style="width:85%;">
+                                            <div class="modal-header">
+
+                                                <h3 class="modal-title" id="modal-title">Checkin's</h3>
+
+                                            </div>
+                                            <div class="modal-body">
+                                                <section class="profile-env">
+                                                    <div class="row">
+                                                        <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [streetView]="true" [scrollwheel]="true" [zoomControl]="true">
+                                                           
+                                                            <agm-marker *ngFor="let data of mapPoints" [latitude]="data.lat" [longitude]="data.lng"></agm-marker>
+ 
+                                                        </agm-map>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                            <div class="modal-footer" style="text-align:left">
+
+                                                <span style="font-size: 16px;">{{comment}}</span>
+
+                                                <div style="float: right;padding-top: 5%;">
+
+                                                    <button class="btn btn-primary" type="btn btn-secondary" data-dismiss="modal">OK</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>

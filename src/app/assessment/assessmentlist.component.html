@@ -1,0 +1,295 @@
+<style>
+    a {
+        cursor: pointer;
+    }
+
+    agm-map {
+        height: 300px;
+    }
+</style>
+
+<div class="page-title ng-scope">
+    <div class="title-env">
+        <h1 class="title">Domain Assessments</h1>
+        <p class="description">Manage Domain Assessments.</p>
+    </div>
+    <div class="breadcrumb-env">
+        <ol class="breadcrumb bc-1">
+            <li>
+                <a [routerLink]="['/officerdashboard']">
+                    <i class="fa-home"></i>Dashboard</a>
+            </li>
+            <li class="active">
+                <strong>Domain Assessments</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="row ng-scope">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">All Domain Assessments</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row search-env">
+                    <form class="ng-pristine ng-valid">
+                        <div class="col-sm-12 text-left">
+                            <input class="form-control input-lg" type="text" name="search" placeholder="Search by case name" (keyup.enter)="searchAssessment(userFilter,0,0)"
+                                [(ngModel)]="userFilter" [ngModelOptions]="{standalone: true}">
+
+                            <ul class="dropdown-menu ng-isolate-scope ng-hide" ng-show="isOpen() &amp;&amp; !moveInProgress" ng-style="{top: position().top+'px', left: position().left+'px'}"
+                                role="listbox" aria-hidden="true" uib-typeahead-popup="" id="typeahead-418-4432" matches="matches"
+                                active="activeIdx" select="select(activeIdx, evt)" move-in-progress="moveInProgress" query="query"
+                                position="position" assign-is-open="assignIsOpen(isOpen)" debounce="debounceUpdate">
+                                <!-- ngRepeat: match in matches track by $index -->
+                            </ul>
+                            <button type="submit" class="btn-unstyled" style="right: 15px">
+                                <i class="fa fa-search" (click)="searchAssessment(userFilter,0,0)"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row" style="margin: 0">
+                    <div class="table-responsive" id="customTable">
+
+
+                        <table class="table table-hover members-table middle-align">
+                            <thead>
+                                <tr>
+                                    <th>Case Name</th>
+                                    <th>Assessment Created</th>
+                                    <th>View Map</th>
+                                    <th>Work</th>
+                                    <th>Education</th>
+                                    <th>Health</th>
+                                    <th>Relationships</th>
+                                    <th>Community</th>
+                                    <th>Creativity</th>
+
+                                    <th>Setting</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let domin of allAssessmentlistItems">
+                                    <!-- | filter:{ first_name: userFilter, last_name: userFilter, case_id: userFilter, work: userFilter, relationships: userFilter, health: userFilter, education: userFilter, creativity: userFilter, community: userFilter, case_id: userFilter} : false" -->
+
+
+                                    <td style="cursor:pointer;" class="user-name" (click)="casedeatilsview(domin)" style="color: #2c2e2f;font-size: 14px;">
+                                        <br>
+                                        <strong>{{domin.first_name}} {{domin.last_name}}</strong>
+                                        <br>
+                                        <td>{{domin.createdon | date:'MM-dd-yyyy HH:mm'}}</td>           
+                                        <td>
+                                            <i class="fa fa-map" style="font-size:20px;color:#111;padding-bottom: 10px" aria-hidden="true"></i>
+                                            <button class="editbtn" data-toggle="modal" data-backdrop="static" data-keyboard="false" style="cursor: pointer" (click)="ViewMap(domin)"
+                                                data-target="#myModal">Map</button>
+                                        </td>
+                                        <td>
+                                            <span class="email">{{domin.work}}</span>
+                                        </td>
+                                        <td>
+                                            <span class="email">{{domin.education}}</span>
+                                        </td>
+                                        <td>
+                                            <span class="email">{{domin.health}}</span>
+                                        </td>
+                                        <td>
+                                            <span class="email">{{domin.relationships}}</span>
+                                        </td>
+
+                                        <td>
+                                            <span class="email">{{domin.community}}</span>
+                                        </td>
+                                        <td>
+                                            <span class="email">{{domin.creativity}}</span>
+                                        </td>
+
+                                        <td class="action-links" data-toggle="modal" data-target="#Checkinmodel" data-backdrop="static" (click)="viewAssesment(domin.group_id,domin)"
+                                            data-keyboard="false" style="cursor: pointer">
+                                            <a ng-if="true" href="javascript:void(0);" class="edit ng-scope">
+                                                <i class="linecons-trash"></i> View</a>
+                                        </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <ul *ngIf="pagerAssessmentlist.pages && pagerAssessmentlist.pages.length" class="pagination" style="float:right;">
+                            <li [ngClass]="{disabled:pagerAssessmentlist.currentPage === 1}">
+                                <a (click)="setAssessmentlistPage(1)">First</a>
+                            </li>
+                            <li [ngClass]="{disabled:pagerAssessmentlist.currentPage === 1}">
+                                <a (click)="setAssessmentlistPage(pagerAssessmentlist.currentPage - 1)">Previous</a>
+                            </li>
+                            <li *ngFor="let page of pagerAssessmentlist.pages" [ngClass]="{active:pagerAssessmentlist.currentPage === page}">
+                                <a (click)="setAssessmentlistPage(page)">{{page}}</a>
+                            </li>
+                            <li [ngClass]="{disabled:pagerAssessmentlist.currentPage === pagerAssessmentlist.totalPages}">
+                                <a (click)="setAssessmentlistPage(pagerAssessmentlist.currentPage + 1)">Next</a>
+                            </li>
+                            <li [ngClass]="{disabled:pagerAssessmentlist.currentPage === pagerAssessmentlist.totalPages}">
+                                <a (click)="setAssessmentlistPage(pagerAssessmentlist.totalPages)">Last</a>
+                            </li>
+                        </ul>
+
+
+                        <div id="Checkinmodel" class="modal fade" role="dialog" size="md" tabindex="-1">
+                            <div class="modal-dialog modal-md" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title">Checkin Info</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12 col-xs-12" style="    border-top: #fff solid;">
+
+
+                                                <div class="user-info-sidebar" style="text-align: center;">
+                                                    <a href="javascript:void(0);" class="user-name ng-binding " style="text-transform: capitalize">
+                                                        <img alt="Case image" src="{{Cphotograph}}" class="img-responsive img-thumbnail" style="width: 250px; height: 250px">
+
+                                                    </a>
+
+                                                    <hr>
+                                                    <ul class="list-unstyled user-info-list" style="display:inline-block;text-align: initial;">
+                                                        <li class="ng-binding">
+                                                            <i class="fa fa-calendar" style="padding-right: 10px;"></i>{{Date | date:'mediumDate'}}</li>
+                                                        <li style="padding-top:8%" class="ng-binding">
+                                                            <i class="fa fa-user" style="padding-right: 14px;"></i>{{Name}} </li>
+                                                    </ul>
+                                                    <hr>
+                                                </div>
+                                                <!-- <div>
+
+                                                                                        </div>
+                                                                                        <ul class="list-unstyled user-info-list"><li class="ng-binding"><i class="fa fa-calendar"></i> Dec 4, 2017 3:16 am</li>
+                                                                                        <li class="ng-binding"><i class="fa fa-user"></i> Nita Robinson</li></ul><hr></div></div> -->
+                                                <div class="col-md-12 col-xs-12">
+                                                    <div active="activePill" type="pills" class="ng-isolate-scope">
+                                                        <ul class="nav nav-pills" ng-class="{'nav-stacked': vertical, 'nav-justified': justified}" ng-transclude="">
+                                                            <li class="uib-tab nav-item ng-scope ng-isolate-scope" *ngFor="let tab of tabs" attr.id="{{tab.cat}}" attr.heading="{{tab.name}}">
+                                                                <a href="javascript:void(0)" (click)="changeuestiondata(tab.name,tab.cat,tab.domain_id)" class="nav-link ng-binding">{{tab.name}}</a>
+                                                            </li>
+                                                        </ul>
+
+                                                        <div class="tab-content">
+                                                            <div class="tab-pane active ng-scope" uib-tab-content-transclude="tab">
+                                                                <div class="row ng-scope" style="background: #f7f7f7;margin: 10px 0px;padding: 10px 0px;">
+                                                                    <div class="col-sm-6">Question</div>
+                                                                    <div class="col-sm-2">Answer</div>
+                                                                    <div class="col-sm-4">Point</div>
+                                                                </div>
+                                                                <div class="row ng-scope" *ngFor="let question of viewAssesmentList;index as i;">
+                                                                    <div *ngIf="question.domain_id == domainid">
+                                                                        <div class="col-sm-6 ng-binding">{{question.desc}}</div>
+                                                                        <div class="col-sm-2">
+                                                                            <div>
+                                                                                <strong>Yes</strong>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-4">
+                                                                            <strong>{{question.score}}</strong>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer ng-scope">
+                                                <button class="btn btn-primary" type="btn btn-secondary" data-dismiss="modal">OK</button>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="row">
+                                                                                        <div class="col-md-12 col-xs-12">
+                                                                                        <div class="user-info-sidebar">
+                                                                                        <hr>
+                                                                                        <div class="user-info-sidebar">
+                                                                                                <img alt="Case image" src="{{Cphotograph}}" class="img-responsive img-thumbnail" style="width: 250px; height: 250px"> 
+                                                                                                <hr>
+                                                                                               
+                                                                                                   <a href="javascript:void(0);" class="user-name ng-binding" style="text-transform: capitalize"></a><hr>
+                                                                                                   <ul class="list-unstyled user-info-list">
+                                                                                                       <li class="ng-binding"><i class="fa fa-calendar" style="padding-right: 10px;"></i>{{Date | date:'mediumDate'}}</li>
+                                                                                                       <li class="ng-binding"><i class="fa fa-user" style="padding-right: 10px;"></i>{{Name}} </li>
+                                                                                                      </ul><hr></div>
+          
+                                                                                        <div class="col-md-12 col-xs-12">
+                                                                                        <div active="activePill" type="pills" class="ng-isolate-scope">
+                                                                                              <ul class="nav nav-pills" ng-class="{'nav-stacked': vertical, 'nav-justified': justified}" ng-transclude="">                                                                               
+                                                                                              <li class="uib-tab nav-item ng-scope ng-isolate-scope" *ngFor="let tab of tabs" attr.id="{{tab.name}}" attr.heading="{{tab.name}}">
+                                                                                               <a href="javascript:void(0)" (click)="changeuestiondata(tab.name,tab.cat,tab.domain_id)" class="nav-link ng-binding">{{tab.name}}</a>
+                                                                                               </li>
+                                                                                             </ul>
+                                                                                             
+                                                                                          <div class="tab-content">
+                                                                                          <div class="tab-pane active ng-scope" uib-tab-content-transclude="tab">
+                                                                                          <div class="row ng-scope" style="background: #f7f7f7;">
+                                                                                          <div class="col-sm-6">Question</div>
+                                                                                          <div class="col-sm-2">Answer</div>
+                                                                                          <div class="col-sm-4">Point</div></div>
+                                                                                          <div class="row ng-scope" *ngFor="let question of viewAssesmentList;index as i;" style="margin-bottom: 10px;">
+                                                                                          <div *ngIf="question.domain_id == domainid">
+                                                                                         <div class="col-sm-6 ng-binding">{{question.desc}}</div>
+                                                                                         <div class="col-sm-2"><div>
+                                                                                         <strong>Yes</strong>
+                                                                                         </div>
+                                                                                         </div>
+                                                                                         <div class="col-sm-4">
+                                                                                         <strong>{{question.score}}</strong>
+                                                                                          </div>
+                                                                                            </div>
+                                                                                           </div>
+                                                                                           </div>
+                                                                                        </div></div></div></div>
+                                                                            <div class="modal-footer ng-scope">
+                                                                           <button class="btn btn-primary" type="btn btn-secondary" data-dismiss="modal">OK</button>
+                                                                           </div>
+                                                                     </div>
+                                                                  </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="myModal" class="modal" role="dialog" size="md" tabindex="-1">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content" style="width:85%;">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">CheckIn</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <section class="profile-env">
+                                            <div class="row">
+                                                <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [streetView]="true" [scrollwheel]="true" [zoomControl]="true">
+                                                    <agm-marker [latitude]="lat" [longitude]="lng">
+                                                        <agm-info-window>
+                                                            <strong>{{mapdate | date:'MM-dd-yyyy hh:mm'}}</strong>
+                                                        </agm-info-window>
+                                                    </agm-marker>
+
+                                                    <!-- <agm-circle [latitude]="lat" [longitude]="lng" 
+                                                                                        [radius]="5000"
+                                                                                        [fillColor]="'red'"                                                                                         >
+                                                                                    </agm-circle>                                  -->
+
+                                                </agm-map>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" type="btn btn-secondary" data-dismiss="modal">OK</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,236 @@
+<style>
+    a {
+        cursor: pointer;
+    }
+
+    agm-map {
+        height: 300px;
+    }
+</style>
+
+<div class="page-title ng-scope">
+    <div class="title-env">
+        <h1 class="title">Checkin List</h1>
+        <p class="description">Manage your supervised checkins.</p>
+    </div>
+    <div class="breadcrumb-env">
+        <ol class="breadcrumb bc-1">
+            <li>
+                <a ui-sref="app.officerDashboard" [routerLink]="['/officerdashboard']">
+                    <i class="fa-home"></i>Dashboard</a>
+            </li>
+            <li class="active">
+                <strong>Checkin List</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row ng-scope">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">All Checkins</h3>
+            </div>
+            <div class="panel-body">
+ 
+
+                <div class="row search-env">
+                    <form class="ng-pristine ng-valid">
+                        <div class="col-sm-12 text-left">
+
+                            <input class="form-control input-lg" type="text" name="search" placeholder="Search" [(ngModel)]="usercheckinlistFilter" (keyup.enter)="searchcheckin(userFilter,0,0)"
+                                [ngModelOptions]="{standalone: true}">
+                            <button type="submit" class="btn-unstyled" style="right: 15px">
+                                <i class="fa fa-search" (click)="searchcheckin(usercheckinlistFilter,0,0)"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div> 
+                <div class="row" style="margin: 0">
+                    <table class="table table-hover members-table middle-align">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Case Name</th>
+                                <th>CheckIn Created</th>
+                                <th>Location</th>
+                                <th>Comments</th>
+                                <th>Settings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let checkin of allcheckinlistItems">
+
+                                <td style="width: 5%;" data-toggle="modal" data-target="#Checkinmodel" (click)="ViewCheckin(checkin)">
+                                    <img class="product-img imgback" src="{{domainConfigUrl}}Data/cases/{{checkin.caseid}}{{checkin.photo}}" class="img-circle"
+                                        alt="user-pic" style="width: 50px !important;height: 50px !important;">
+                                </td>
+                                <td class="user-name" data-toggle="modal" data-target="#Checkinmodel" data-backdrop="static" data-keyboard="false" style="cursor: pointer;color: #2c2e2f;font-size: 14px;"
+                                    (click)="ViewCheckin(checkin)">
+                                    <strong>{{checkin.first_name}} {{checkin.last_name}} </strong>
+                                </td>
+                                <td>{{checkin.createdon | date:'MM-dd-yyyy HH:mm'}}</td>           
+                                <td>
+                                    <i class="fa fa-map" style="font-size:20px;color:#111;padding-bottom: 10px" aria-hidden="true"></i>
+                                    <button class="editbtn" data-toggle="modal" data-backdrop="static" data-keyboard="false" style="cursor: pointer" (click)="ViewMap(checkin)"
+                                        data-target="#myModal">View Map</button>
+                                </td>
+                                <td>{{checkin.comment}}</td>
+                                <td style="Color:#FFA400!important" (click)="checkinview(checkin)">View Checkin</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 text-right text-center-sm">
+
+                        <ul *ngIf="pagercheckinlist.pages && pagercheckinlist.pages.length" class="pagination" style="float:right;">
+                            <li [ngClass]="{disabled:pagercheckinlist.currentPage === 1}">
+                                <a (click)="setcheckinlistPage(1)">First</a>
+                            </li>
+                            <li [ngClass]="{disabled:pagercheckinlist.currentPage === 1}">
+                                <a (click)="setcheckinlistPage(pagercheckinlist.currentPage - 1)">Previous</a>
+                            </li>
+                            <li *ngFor="let page of pagercheckinlist.pages" [ngClass]="{active:pagercheckinlist.currentPage === page}">
+                                <a (click)="setcheckinlistPage(page)">{{page}}</a>
+                            </li>
+                            <li [ngClass]="{disabled:pagercheckinlist.currentPage === pagercheckinlist.totalPages}">
+                                <a (click)="setcheckinlistPage(pagercheckinlist.currentPage + 1)">Next</a>
+                            </li>
+                            <li [ngClass]="{disabled:pagercheckinlist.currentPage === pagercheckinlist.totalPages}">
+                                <a (click)="setcheckinlistPage(pagercheckinlist.totalPages)">Last</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+
+<div id="myModal" class="modal" role="dialog" size="md" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:85%;">
+            <div class="modal-header">
+                <h4 class="modal-title">CheckIn</h4>
+            </div>
+            <div class="modal-body">
+                <section class="profile-env">
+                    <div class="row">
+                        <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [streetView]="true" [scrollwheel]="true" [zoomControl]="true">
+                            <agm-marker [latitude]="lat" [longitude]="lng">
+                                <agm-info-window>
+                                    <strong>{{mapdate | date:'MM-dd-yyyy hh:mm'}}</strong>
+                                </agm-info-window>
+                            </agm-marker>
+                        
+                        </agm-map>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="Checkinmodel" class="modal fade" role="dialog" size="md" tabindex="-1">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Checkin Info</h3>
+            </div>
+            <div class="modal-body">
+                <section class="profile-env">
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="user-info-sidebar">
+
+                                <img alt="Case image" src="{{Cphotograph}}" class="img-responsive img-thumbnail" style="width: 250px; height: 250px">
+                                <a href="javascript:void(0);" class="user-name ng-binding" style="text-transform: capitalize">
+                                    <span> {{CmodefiedBy}}</span>
+                                </a>
+                                <hr>
+
+                                <ul class="list-unstyled user-info-list">
+                                    <li class="ng-binding">
+                                        <i class="fa fa-calendar"></i>{{CdueDate | date:'mediumDate'}}</li>
+                                    <li class="ng-binding">
+                                        <i class="fa fa-user"> {{CfirstName}}</i>
+                                    </li>
+                                </ul>
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-xs-12">
+
+
+                            <section class="user-timeline-stories">
+                                <article class="timeline-story">
+                                    <div>
+                                        <ul class="list-unstyled">
+                                            <li>
+                                                <div class="story-comment">
+                                                    <div class="story-comment-content">
+                                                        <a href="javascript:void(0);">Created</a>
+                                                        <p class="ng-binding">{{CcreatedOn | date:'mediumDate'}}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="story-comment">
+
+                                                    <div class="story-comment-content">
+                                                        <a href="javascript:void(0);">Due Date</a>
+                                                        <p class="ng-binding">{{CdueDate | date:'mediumDate'}}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="story-comment">
+                                                    <div class="story-comment-content">
+                                                        <a href="javascript:void(0);">Location</a>
+                                                        <p class="ng-binding">{{Clocation}}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                            </li> 
+                                         
+                                            <li>
+                                                <div class="story-comment">
+                                                    <div class="story-comment-content">
+                                                        <a href="javascript:void(0);">Notes</a>
+                                                        <p></p>
+                                                        <ul class="list-unstyled">
+                                                            <li class="list-group-item ng-binding ng-scope">{{Cnotes}}</li>
+                                                        </ul>
+
+                                                        <p></p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                            </li>
+                                            <li>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </article>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+                <button class="btn btn-primary" type="btn btn-secondary" data-dismiss="modal" style="float:right">OK</button>
+            </div> 
+        </div>
+    </div>
+</div>

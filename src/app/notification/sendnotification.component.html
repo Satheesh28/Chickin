@@ -1,0 +1,116 @@
+<div class="page-title ng-scope">
+
+
+
+    <div class="title-env">
+        <h1 class="title">Send new Notification</h1>
+        <p class="description">Send a new notification</p>
+    </div>
+    <div class="breadcrumb-env">
+        <ol class="breadcrumb bc-1">
+            <li>
+                <a ui-sref="app.officerDashboard" href="#!/officer-dashboard">
+                    <i class="fa-home"></i>Dashboard</a>
+            </li>
+            <li class="active">
+                <strong>Send Notification</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row ng-scope">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Case</h3>
+            </div>
+            <form role="form" name="form" #form="ngForm" name="form" #notification="ngForm" class="form-horizontal" accept-charset="utf-8">
+                <div class="panel-body">
+                    <div class="row">
+                        <!-- <label class="col-sm-2 col-xs-4 control-label" for="case">Select Case</label>
+                 <div class="col-sm-10 col-xs-8">
+                    <ng-multiselect-dropdown name="cities"
+                    [data]="cities"
+                    [(ngModel)]="selectedItem"
+                    [settings]="dropdownSettings" (onDeSelect)="OnItemDeSelect($event)"
+                    (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event)"
+                    (onSelect)="onItemSelect($event)"
+                    [disabled]="disabled"></ng-multiselect-dropdown>                  
+                </div>  -->
+                        <div class="col-sm-12">
+                            <ul *ngIf="pager.pages && pager.pages.length" class="pagination" style="float:right;">
+                                <li [ngClass]="{disabled:pager.currentPage === 1}">
+                                    <a (click)="setPage(1)">First</a>
+                                </li>
+                                <li [ngClass]="{disabled:pager.currentPage === 1}">
+                                    <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+                                </li>
+                                <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                                    <a (click)="setPage(page)">{{page}}</a>
+                                </li>
+                                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                                    <a (click)="setPage(pager.currentPage + 1)">Next</a>
+                                </li>
+                                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                                    <a (click)="setPage(pager.totalPages)">Last</a>
+                                </li>
+                            </ul>
+                            <table class="table table-hover members-table middle-align">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Case Name</th>
+                                        <th>Case Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let case of CaseList">
+                                        <td>
+                                            <input type="checkbox" name="case" id="case"  [checked]="case.status" (click)="caseselect(case.id)">
+                                        </td>
+                                        <td (click)="casedeatilsview(case)">
+
+                                            <strong style="color:#2c2e2f;font-size: 14px;">{{case.first_name}} {{case.last_name}} </strong>
+                                            <br>
+                                            <span>{{case._id}}</span>
+
+                                        </td>
+                                        <!-- <td>{{case.case_date | date:shortDate}}</td> -->
+                                        <!-- <td>{{case.access_code}}</td>-->
+                                        <td>{{case.case_number}}</td>
+                                        <!-- <td style="Color:#FFA400!important;cursor:pointer;" (click)="caseview(case)">View Case</td> -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="" style="padding-top: 5%">
+                        <div class="row">
+                            <div class="form-group" [ngClass]="{ 'has-error': notes1.invalid }">
+                                <label style="text-align:right" class="col-sm-2 control-label">Notes</label>
+                                <div class="col-sm-9 ">
+                                    <textarea name="notes1" id="notes1" #notes1="ngModel" class="form-control ng-pristine ng-valid ng-empty ng-touched" placeholder="Enter some note"
+                                        [(ngModel)]="notes" required></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="padding-top: 1%">
+                        <div class="col-sm-11 text-right">
+                            <button type="button" class="btn btn-white ng-scope">
+                                <a [routerLink]="['/officerdashboard']" href="javascript:void(0);">
+                                    Cancel</a>
+                            </button>
+                            <button type="submit" class="btn btn-secondary ng-binding ng-scope" [disabled]="notification.form.invalid || !Checkin" (click)="performSubmit()">Send</button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

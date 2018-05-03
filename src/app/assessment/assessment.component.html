@@ -1,0 +1,107 @@
+<style>
+  .hide {
+    display: none !important;
+  }
+</style>
+
+<div class="page-title ng-scope">
+  <div class="title-env">
+    <h1 class="title">Add Assessment</h1>
+    <p class="description">Add a new assessment</p>
+  </div>
+  <div class="breadcrumb-env">
+    <ol class="breadcrumb bc-1">
+      <li>
+        <a [routerLink]="['/officerdashboard']">
+          <i class="fa-home"></i>Dashboard</a>
+      </li>
+      <li class="active">
+        <strong>Add assessment</strong>
+      </li>
+    </ol>
+  </div>
+</div>
+
+<div class="row ng-scope">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Case</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <label class="col-sm-2 col-xs-4 control-label" for="case">Select Case</label>
+          <div class="col-sm-10 col-xs-8">
+            <select class="selectize-input" id="Case" name="Case" [(ngModel)]="caseid" (change)="caseSelected(caseid)">
+              <option selected="" value="undefined" disabled>--Select Case--</option>
+              <option *ngFor="let case of CaseList" [ngValue]="case.id" style="margin-top:5px;">
+                {{case.first_name + " " + case.last_name}} 
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<div class="row ng-scope" [ngClass]="{ 'hide': !ngShowVal }">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Enter checkin data</h3>
+      </div>
+      <div class="panel-body">
+        <form role="form" name="form" #form="ngForm" name="form" #assessment="ngForm" class="form-horizontal ng-pristine ng-invalid ng-invalid-required"
+          accept-charset="utf-8">
+          <div class="form-group">
+            <div active="activePill" type="pills" class="ng-isolate-scope">
+              <ul class="nav nav-pills" ng-class="{'nav-stacked': vertical, 'nav-justified': justified}" ng-transclude="">
+         
+                <li class="uib-tab nav-item ng-scope ng-isolate-scope" *ngFor="let tab of tabs" attr.id="{{tab.name}}" attr.heading="{{tab.name}}">
+                  <a href="javascript:void(0)" (click)="changeuestiondata(tab.name,tab.cat,tab.domain_id)" class="nav-link ng-binding">{{tab.name}}</a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active ng-scope" uib-tab-content-transclude="tab">
+                  <div class="row ng-scope" style="padding: 10px 0;background: #f7f7f7;margin: 5px -15px">
+                    <div class="col-sm-6">Question</div>
+                    <div class="col-sm-2">Answer</div>
+                  </div>        
+                  <div class="row ng-scope" *ngFor="let question of QuestionData;index as i;" style="margin-bottom: 10px;">
+                    <div *ngIf="question.domain_id == domainid">
+                      <div class="col-sm-6 ng-binding">{{question.desc}}</div>
+                      <div class="col-sm-2">
+                        <div>
+
+                          <input type="checkbox" name="question{{question.domain_id}}{{i}}" id="question{{question.domain_id}}{{i}}" [checked]="question.status"
+                            (change)="domincondtion(question,question.domain_id,i,question.id)">
+                        </div>                     
+                      </div>                   
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group" [ngClass]="{ 'has-error': location1.invalid }">
+            <label class="col-sm-2 col-xs-4 control-label" for="case" style="text-align: left">Location</label>
+            <div class="col-sm-10 col-xs-8">
+              <input type="text" name="location1" id="location1" #location1="ngModel" (keypress)="onlyDecimalNumberKey($event)" class="form-control"
+                [(ngModel)]="longlat" (change)="changelocation()" required="required">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12 text-right">
+              <button type="button" class="btn btn-white">
+                <a [routerLink]="['/officerdashboard']" href="javascript:void(0);">
+                  Cancel</a>
+              </button>
+              <button type="submit" class="btn btn-secondary" [disabled]="assessment.form.invalid  || !Checkin" (click)="dominassessment()">Add Asessment</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+﻿
+<div *ngIf="message" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }">
+    <button type="button" class="close" ng-click="alartclose()" (click)="CloseAlert()">×</button>
+    <p style="color:white;">{{message.text}}</p>
+</div>
+
+

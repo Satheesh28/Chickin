@@ -1,0 +1,126 @@
+<div class="page-title ng-scope">
+    <div class="title-env">
+        <h1 class="title ng-binding">Add Checkin</h1>
+        <p class="description ng-binding">Add a new Checkin</p>
+    </div>
+    <div class="breadcrumb-env">
+        <ol class="breadcrumb bc-1">
+            <li>
+                <a ui-sref="app.officerDashboard" [routerLink]="['/officerdashboard']">
+                    <i class="fa-home"></i>Dashboard</a>
+            </li>
+            <li class="active">
+                <strong class="ng-binding">Add Checkin</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+
+<div class="row ng-scope">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Case</h3>
+            </div>
+            <div class="panel-body">
+
+                <div class="row" style="margin-bottom: 3%;">
+                    <label class="col-sm-2 col-xs-4 control-label" for="rec">Select Case</label>
+                    <div class="col-sm-10 col-xs-8">
+                        <select class="form-control unicase-form-control selectpicker" [disabled]="CheckinEnable" id="case_id" (change)="caseSelected(case_id)"
+                            name="case_id" [(ngModel)]="case_id" required>
+                            <option selected="" value="undefined">--Select Case--</option>
+                            <option *ngFor="let case of CaseList" [ngValue]="case.id" style="margin-top:5px;">
+                                {{case.first_name + " " + case.last_name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <!-- *ngIf="case_id" -->
+                <div class="col-md-12" *ngIf="case_id">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title ng-binding">{{title}}</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form role="form" name="form" #form="ngForm" name="form" #checkin="ngForm" class="form-horizontal" accept-charset="utf-8">
+                                <div class="form-group" [ngClass]="{ 'has-error': longlat1.invalid }">
+                                    <label class="col-sm-2 col-xs-4 control-label required" style="margin-top: 2%;" for="longlat">Location</label>
+                                    <div style="padding-left: 0%" class="col-sm-4 col-xs-8">
+                                        <div class="col-xs-8" id="LatLanDiv" style="margin-top: 8%;">
+                                            <input type="text" class="form-control" (keypress)="onlyDecimalNumberKey($event)" name="longlat1" [disabled]="CheckinEnable"
+                                                id="longlat1" placeholder="longlat" [(ngModel)]="longlat" #longlat1="ngModel"
+                                                required>
+                                        </div>
+                                        <!-- <div style="padding-left: 0%" class="col-sm-4" *ngIf="LatLanImg" id="LatLanImg">
+             <img id="ImgLat" [src]="logoLat" style="height:300px;width:600px;">
+    </div> -->
+                                    </div>
+                                </div>
+                                <div class="form-group-separator"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-xs-4 control-label required" for="dueDate">Image</label>
+                                    <div class="col-sm-8 col-xs-8 ng-scope">
+                                        <label class="" aria-hidden="true">
+                                            <img [src]="sanitizer.bypassSecurityTrustUrl(imagePreview)" class="rounded" style="height:150px;width:150px;">
+                                            <input type="file" accept=".png, .jpg, .jpeg" style="display:none;" [disabled]="CheckinEnable" (change)="onFileChange($event)"
+                                                required/>
+                                            <span>{{ImageFileName}}</span>
+
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group-separator"></div>
+                                <div class="form-group" [ngClass]="{ 'has-error': comment1.invalid }">
+                                    <label class="col-sm-2 col-xs-4 control-label required">Notes</label>
+                                    <div class="col-sm-10 col-xs-8" style="padding-top: 8px">
+                                        <div class="row ng-scope">
+                                            <div class="col-sm-10">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <textarea class="form-control" [disabled]="CheckinEnable" placeholder="Please add a note" name="comment1" id="comment1" [(ngModel)]="comment"
+                                                            #comment1="ngModel" required>
+                            </textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-xs-4 control-label required">Conditions</label>
+                                    <div class="col-sm-10 col-xs-8" style="padding-top: 8px">
+                                        <!-- ngRepeat: con in vm.checkinData.conditions track by $index -->
+                                        <div class="row ng-scope" *ngFor="let condtion of caseCondtion;index as i;">
+                                            <div class="col-sm-10">
+                                                <p class="ng-binding">{{condtion.desc}}</p>
+                                            </div>
+                                            <div class="col-sm-2 text-center">
+                                                <input type="checkbox" name="checkin_agree_0" attr.id="condtion{{i}}" attr.name="condtion{{i}}" [checked]="condtion.agreed"
+                                                    [disabled]="CheckinEnable" (change)="condtioncheck(i)" class="ng-pristine ng-untouched ng-valid ng-empty">
+                                                <!-- <input type="checkbox" name="checkin_agree_0" [disabled]="CheckinEnable" (change)="condtioncheck(condtion)" class="ng-pristine ng-untouched ng-valid ng-empty"> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group-separator"></div>
+                                <div class="form-group-separator">
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12 text-right" *ngIf="!submithide">
+                                        <button type="button" class="btn btn-white ng-scope">
+
+                                            <a [routerLink]="['/checkinhistory']" href="javascript:void(0);">
+                                                Cancel</a>
+                                        </button>
+                                        <button type="submit" class="btn btn-secondary" [disabled]="checkin.form.invalid || !ImageUpload" (click)="savecheckin()">Add</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>

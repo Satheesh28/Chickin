@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache">  
+  <meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
+  <title>TrustedCheckin</title>
+  <base href="/">
+  <script src="https://use.fontawesome.com/0a2047cf74.js"></script>
+  <link href="http://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="assets/css/vendor.min.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/app.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
+
+  <script type="text/javascript" src="assets/js/vendor.min.js"></script>  
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.11.1/slimselect.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.11.1/slimselect.min.css" rel="stylesheet"></link> -->
+
+  <!-- <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"> -->
+  <link rel="stylesheet" type="text/css" media="all" href="assets/css/daterangepicker.css" />
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="assets/js/moment.js"></script>
+  <script type="text/javascript" src="assets/js/daterangepicker.js"></script>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.2/select2.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.2/select2.css" rel="stylesheet">
+  <!-- <script>
+      $( function() {
+        // $( "#datepicker" ).datepicker();
+
+        $('#rangepicker').daterangepicker({
+          locale: {
+            // format: 'DD-MM-YYYY',
+            format: 'MM-DD-YYYY',
+    },         
+          separator: ' - ',
+         });
+
+         $('#rangepicker').on('apply.daterangepicker', function(ev, picker) {
+    // var val=  $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+   var startDate = picker.startDate.format('MM-DD-YYYY');
+   var endDate =picker.endDate.format('MM-DD-YYYY');
+
+      localStorage.setItem('startDate',JSON.stringify(startDate));
+      localStorage.setItem('endDate',JSON.stringify(endDate));
+  });
+
+
+         $("#condtion").select2();
+                
+      } );  
+      </script> -->
+
+  
+</head>
+<body class="page-body">
+  <app-root></app-root>
+  </body>
+</html>

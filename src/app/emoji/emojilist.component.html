@@ -1,0 +1,158 @@
+<style>
+    a {
+        cursor: pointer;
+    }
+
+    agm-map {
+        height: 300px;
+    }
+</style>
+
+<style>
+    .lengthEmoji {
+        display: block;
+        background: #A4A4A4;
+        color: #fff;
+        text-align: center;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 2px 10px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<div class="page-title ng-scope">
+    <div class="title-env">
+        <h1 class="title">All Emojis</h1>
+    </div>
+    <div class="breadcrumb-env">
+        <ol class="breadcrumb bc-1">
+            <li>
+                <a ui-sref="app.officerDashboard" [routerLink]="['/officerdashboard']">
+                    <i class="fa-home"></i>Dashboard</a>
+            </li>
+            <li class="active">
+                <strong>Emoji List</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="row ng-scope">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">All Emoji</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row search-env">
+                    <form class="ng-pristine ng-valid">
+                        <div class="col-sm-12 text-left">
+                            <input class="form-control input-lg" type="text" placeholder="Search by case name" [(ngModel)]="useremojiFilter" (keyup.enter)="SearchemojiList(useremojiFilter,0,0)"
+                                [ngModelOptions]="{standalone: true}">
+                            <ul class="dropdown-menu ng-isolate-scope ng-hide" ng-show="isOpen() &amp;&amp; !moveInProgress" ng-style="{top: position().top+'px', left: position().left+'px'}"
+                                role="listbox" aria-hidden="true" uib-typeahead-popup="" id="typeahead-683-319" matches="matches"
+                                active="activeIdx" select="select(activeIdx, evt)" move-in-progress="moveInProgress" query="query"
+                                position="position" assign-is-open="assignIsOpen(isOpen)" debounce="debounceUpdate">
+                               
+                            </ul>
+                            <button type="submit" class="btn-unstyled" style="right: 15px">
+                                <i class="fa fa-search" (click)="SearchemojiList(useremojiFilter,0,0)"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="row" style="margin: 0">
+                    <table class="table table-hover members-table middle-align">
+                        <thead style="border-bottom: 1px solid #eee;">
+                            <tr style="width:100%">
+
+                                <th style="width:10%">Case Name</th>
+                                <th colspan="10">Last 10 EMOTIONS</th> 
+
+                            </tr>
+                        </thead>
+
+                        <tbody style="background:#fff">
+                            <tr *ngFor="let emj of EmojiList">
+                                <td style="color:#2c2e2f;font-size:14px;" (click)="emojicaseview(emj.case_id)">
+                                    <strong>{{emj.case_name}}</strong>
+
+                                </td>
+
+                                <td *ngFor="let data of emj.list" style="width: 1%;text-align: center;">
+
+                                    <strong *ngIf="data.type !='yes'">
+                                        <span style=" background:#A4A4A4;padding: 0px 4px 0px 4px;color:#fff">{{ data.date | date:'MM/dd' }}</span>
+                                        <br>
+                                        <img src="assets/img/emojis/{{data.type}}.png" class="rounded" data-target="#myModal" data-toggle="modal" (click)="emojiview(data.id,emj,data.date)"
+                                            style="height:35px;width:35px;margin-top: 3px">
+                                    </strong>
+                                    <span style="background:#fff" *ngIf="data.type =='yes'" class="lengthEmoji"></span>
+
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 text-right text-center-sm">
+
+                        <ul *ngIf="pageremoji.pages && pageremoji.pages.length" class="pagination" style="float:right;">
+                         
+                            <li [ngClass]="{disabled:pageremoji.currentPage === 1}">
+                                <a (click)="setemojiPage(pageremoji.currentPage - 1)">Previous</a>
+                            </li>
+                            <li *ngFor="let page of pageremoji.pages" [ngClass]="{active:pageremoji.currentPage === page}">
+                                <a (click)="setemojiPage(page)">{{page}}</a>
+                            </li>
+                            <li [ngClass]="{disabled:pageremoji.currentPage === pageremoji.totalPages}">
+                                <a (click)="setemojiPage(pageremoji.currentPage + 1)">Next</a>
+                            </li>
+                           
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal" role="dialog" size="md" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:85%;">
+            <div class="modal-header">
+
+                <h3 class="modal-title" id="modal-title">Emoji's
+                    <span>{{emotion_type}}</span>
+                    <span>{{username}}</span>
+                    <span>{{date | date:'MM/dd' }}</span>
+                </h3>
+
+            </div>
+            <div class="modal-body">
+                <section class="profile-env">
+                    <div class="row">
+                        <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [streetView]="true" [scrollwheel]="true" [zoomControl]="true">
+                            <agm-marker [latitude]="lat" [longitude]="lng">
+
+                                <agm-info-window>
+                                    <strong>{{mapdate | date:'MM-dd-yyyy hh:mm'}}</strong>
+                                </agm-info-window>
+                            </agm-marker>
+                        </agm-map>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer" style="text-align:left">
+
+                <span style="font-size: 16px;">{{comment}}</span>
+
+                <div style="float: right;padding-top: 5%;">
+
+                    <button class="btn btn-primary" type="btn btn-secondary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

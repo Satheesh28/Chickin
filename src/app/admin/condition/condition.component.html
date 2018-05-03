@@ -1,0 +1,103 @@
+<div class="page-title">
+  <div class="title-env">
+      <h1 class="title">Condition List</h1>
+      <p class="description">Create, update and delete Conditions.</p>
+  </div>
+  <div class="breadcrumb-env">
+      <ol class="breadcrumb bc-1">
+          <!-- <li> <a ui-sref="app.adminDashboard" ><i class="fa-home"></i>Dashboard</a> </li> -->
+          <li class="active"> <strong>Conditions List</strong> </li>
+      </ol>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+              <h3 class="panel-title">Add New Condition</h3>
+              <div class="panel-options">
+                  <a href="#" data-toggle="panel"> <span class="collapse-icon">–</span> <span class="expand-icon">+</span> </a>
+              </div>
+          </div>
+          <div class="panel-body">
+              <form class="form-horizontal" (ngSubmit)="regionForm.form.valid && save_region()" #regionForm="ngForm" accept-charset="utf-8">
+                  <div class="form-group">
+                      <label class="col-sm-3 control-label required" for="regionName">Condition Name</label>
+                      <div class="col-sm-7">
+                          <input   type="text" class="form-control" required [(ngModel)]="region.desc" #desc="ngModel"  name="desc" id="regionName" placeholder="Conditions Name" />
+                      </div>
+                      <div class="col-sm-2 text-right">
+                          <button type="submit" class="btn btn-secondary" [disabled]="!regionForm.form.valid" >{{isEdit?"Save":"Add"}}</button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+              <h3 class="panel-title">Conditions List</h3>
+              <div class="panel-options">
+                  <a href="#" data-toggle="panel"> <span class="collapse-icon">–</span> <span class="expand-icon">+</span> </a>
+              </div>
+          </div>
+          <div class="panel-body">
+              <div class="row search-env">
+                 
+                      <div class="col-sm-12 text-left">
+                          <input class="form-control input-lg"  [(ngModel)]="userFilter" (keyup.enter)="SearchList(userFilter,0,0)" (change)="SearchList(userFilter,0,0)"  type="text" placeholder="Search by Name" >
+                         
+                      </div>
+                  
+              </div>
+              <table class="table table-hover members-table middle-align">
+                  <thead>
+                      <tr>
+                          <th>Conditions Name</th>
+                         
+                          <th>ID</th>
+                          <th>Settings</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let r of allItems">
+                          <td class="user-name"> 
+                              <a href="javascript:void(0);" class="name" style="text-transform: capitalize;">{{(r.desc)}}</a> 
+                              
+                            </td>
+                          
+                          <td class="user-id" >{{r.id}}</td>
+                          <td class="action-links">
+                              <a href="javascript:void(0);"  [routerLink]="['/condition',  r.id ]" class="edit"> <i class="linecons-pencil"></i> EditCondition
+                              </a>
+                              <a href="javascript:void(0);"  class="delete" (click)="delete_condition(r.id)"> <i class="linecons-trash"></i> Delete
+                              </a>
+                          </td>
+                      </tr>
+                   
+                  </tbody>
+              </table>
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination" style="float:right;">
+                <li [ngClass]="{disabled:pager.currentPage === 1}">
+                    <a (click)="setPage(1)">First</a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === 1}">
+                    <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+                </li>
+                <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                    <a (click)="setPage(page)">{{page}}</a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                    <a (click)="setPage(pager.currentPage + 1)">Next</a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                    <a (click)="setPage(pager.totalPages)">Last</a>
+                </li>
+            </ul>
+          </div>
+      </div>
+  </div>
+</div>

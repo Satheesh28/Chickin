@@ -1,0 +1,82 @@
+
+
+<div class="page-title ng-scope">
+  <div class="title-env">
+     <h1 class="title ng-binding">Question</h1>
+     <p class="description ng-binding">Domain Question</p>
+  </div>
+  <div class="breadcrumb-env">
+     <ol class="breadcrumb bc-1">
+        <!-- <li><a ui-sref="app.officerDashboard" href="#!/officer-dashboard"><i class="fa-home"></i>Dashboard</a></li> -->
+        <li class="active"><strong class="ng-binding">Add Question</strong></li>
+     </ol>
+  </div>
+</div>
+<div class="row ng-scope">
+  <div class="col-md-12">
+     <div class="panel panel-default">
+        <div class="panel-heading">
+           <h3 class="panel-title">Domain Question</h3>
+        </div>
+        <div class="panel-body">
+           <form role="form" name="form" novalidate="" class="form-horizontal ng-pristine ng-invalid ng-invalid-required ng-valid-date ng-valid-min" accept-charset="utf-8">
+            <div class="form-group">
+              <label class="col-sm-2 col-xs-4 control-label required" for="idts">Domain Section</label>
+              <div class="col-sm-10 col-xs-8">
+                 <div active="activePill" type="pills" class="ng-isolate-scope" >
+                    <ul class="nav nav-pills cursorpointer" >
+                       <li *ngFor="let tab of tabs" id="{{tab.name}}" (click)="Questiondata(tab.name,tab.cat,tab.domain_id)" class="uib-tab nav-item" heading="Work">
+                       <a  class="nav-link ng-binding" uib-tab-heading-transclude="">{{tab.name}}</a>
+                       </li>
+                    </ul>
+                    <div class="tab-content">
+                       <div class="tab-pane ng-scope active" uib-tab-content-transclude="tab">
+                          <div class="row ng-scope">
+                             <div class="col-md-12 text-right">
+                                <button class="btn btn-primary" (click)="addQuestion()">Add new Question</button>
+                             </div>
+                          </div>
+                          <div *ngIf="workstatus">
+                             <div class="row ng-scope">
+                                <div class="col-md-6 text-bold">Question</div>
+                                <div class="col-md-2 text-bold">Score (1 to 10)
+                                </div>
+                             </div>
+                          </div>
+                          
+                          <div class="row" *ngFor="let data of QuestionData;index as i">
+                            
+                             <div  *ngIf="data.domain_id == domainid">
+                                <div class="col-md-6">
+                                   <div class="form-group">
+                                      <input type="text" name="desc" class="form-control" [value]="data.desc" (change)="workchange(i,$event.target.value)" /> 
+                                   </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group">
+                                      <input type="number" name="score"  class="form-control"  [value]="data.score" (change)="workscore(i,$event.target.value)"/>
+                                   </div>
+                                </div>
+                                <div class="col-md-2 text-right">
+                                  <button type="submit" class="btn btn-secondary" (click)="save_question(i)">{{data.is_new?"Add":"Update"}}</button>
+                                  <button type="button" class="btn btn-danger" [disabled]="data.is_new" (click)="delete_question(i)">Delete</button> 
+                               </div>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+              <div class="form-group-separator"></div>
+              <!-- <div class="form-group">
+                 <div class="col-sm-12 text-right"><button type="button" class="btn btn-white" ui-sref="app.officerDashboard" href="#!/officer-dashboard">Cancel</button> 
+                    <button type="submit" class="btn btn-secondary ng-binding" (click)="savecase()">{{savebutton}}</button>
+                 </div>
+              </div> -->
+           </form>
+        </div>
+     </div>
+  </div>
+</div>
+

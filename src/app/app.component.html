@@ -1,0 +1,311 @@
+﻿<app-header>
+</app-header>
+<style>
+    .sidebar-menu,
+    .sidebar-user-info {
+        background: #000033 !important;
+    }
+
+    .btn.btn-secondary {
+        background-color: #000033 !important;
+    }
+</style>
+
+<div *ngIf="Login">
+    <app-layout-header></app-layout-header>
+    <alert></alert>
+    <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+    <app-footer></app-footer>
+</div>
+
+<div *ngIf="!Login" class="page-container" id="removedmenu">
+    <div class="page-container" id="removedmenu1">
+
+        <div id="Toggle1" class="sidebar-menu toggle-others hidden-xs fixed ng-scope" ng-class="{'collapsed': vm.isCollapsed}">
+
+            <div class="sidebar-menu-inner" scrollable="">
+                <div class="nano has-scrollbar">
+                    <div class="nano-content" ng-transclude="" tabindex="0" style="right: -17px;">
+                        <div class="logo-img ng-scope"></div>
+                        <header class="logo-env ng-scope">
+                            <div class="logosml">
+                                <a class="logo-expanded text-center">
+                                    <img src="assets/img/smlogo.png"> </a>
+                            </div>
+                            <div class="logo">
+                                <a class="logo-expanded text-center">
+                                    <img src="assets/img/whitethumb.png" style="width:250px; margin-right: 10px">
+                                </a>
+                            </div>
+                            <div class="mobile-menu-toggle visible-xs">
+                                <a href="" data-toggle="mobile-menu" ng-click="vm.showMobileMenu = !vm.showMobileMenu">
+                                    <i class="fa-bars"></i>
+                                </a>
+                            </div>
+                        </header>
+                        <section class="sidebar-user-info ng-scope">
+                            <div class="sidebar-user-info-inner">
+                                <a href="javascript:void(0);" class="user-profile">
+                                    <span class="user-image-initial spanResponsive">
+                                        <span class="image-init ng-binding" ng-bind="vm.getInitial()">{{firstName | slice:0:1 |uppercase }}{{lastName | slice:0:1 | uppercase}}</span>
+                                    </span>
+                                    <span class="user-image-initial">
+                                        <span class="image-init ng-binding" ng-bind="vm.getInitial()">{{firstName | slice:0:1 |uppercase }}{{lastName | slice:0:1 | uppercase}}</span>
+                                    </span>
+                                    <span class="ng-binding">
+                                        <strong style="text-transform: capitalize" class="ng-binding">{{firstName}} {{lastName}}</strong>
+                                    </span>
+                                </a>
+                                <ul class="user-links list-unstyled">
+                                    <li>
+                                        <a [routerLink]="['/editprofile']" title="Edit profile">
+                                            <i class="fa-edit"></i>Edit profile</a>
+                                    </li>
+                                    <li>
+                                        <a (click)="logout()" title="Logout">
+                                            <i class="fa-power-off"></i> Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+
+                        <ul style="display:none" id="main-menu1" class="main-menu ng-scope" *ngIf="!isAdmin">
+
+                            <li class="ng-scope has-sub">
+                                <a href="javascript:void(0);">
+                                    <i class="fa fa-user"></i>
+                                    <span class="title ">User Management</span>
+                                </a>
+                                <ul>
+
+                                    <li>
+                                        <a [routerLink]="['/userdetails']" ui-sref="app.adminUserList" ui-sref-opts="{reload:true}">
+                                            <span class="title ng-binding">User List</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="ng-scope">
+                                        <a [routerLink]="['/user']" ui-sref="app.adminAddUser" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding">Add User</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </li>
+                            <li class="ng-scope has-sub">
+                                <a href="javascript:void(0);" ng-click="item.isOpen= !item.isOpen;">
+                                    <i class="fa fa-map-o"></i>
+                                    <span class="title ng-binding" ng-bind="item.name">Region Management</span>
+                                </a>
+                                <ul ng-if="item.items.length" class="ng-scope">
+
+                                    <li class="ng-scope">
+                                        <a [routerLink]="['/region']" ui-sref="app.adminRegionList" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding" ng-bind="subMenu.name">Region List</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                            <li class="ng-scope has-sub">
+                                <a href="javascript:void(0);" ng-click="item.isOpen= !item.isOpen;">
+                                    <i class="fa fa-map-o"></i>
+                                    <span class="title ng-binding" ng-bind="item.name">Condition Management</span>
+                                </a>
+                                <ul ng-if="item.items.length" class="ng-scope">
+
+                                    <li class="ng-scope">
+                                        <a [routerLink]="['/condition']" ui-sref="app.adminRegionList" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding" ng-bind="subMenu.name">Condition List</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                            <li class="ng-scope has-sub">
+                                <a href="javascript:void(0);" ng-click="item.isOpen= !item.isOpen;">
+                                    <i class="fa fa-map-o"></i>
+                                    <span class="title ng-binding" ng-bind="item.name">Domain Question</span>
+                                </a>
+                                <ul ng-if="item.items.length" class="ng-scope">
+
+                                    <li class="ng-scope">
+                                        <a [routerLink]="['/question']" ui-sref="app.adminRegionList" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding" ng-bind="subMenu.name">Domain Question</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                        </ul>
+
+                        <ul id="main-menu" style="display:none" class="main-menu ng-scope" *ngIf="isUser">
+                            <li id="dashboard" (click)="PageRefresh()">
+                                <a ui-sref="app.officerDashboard">
+                                    <i class="fa-home"></i>
+                                    <span class="title">Dashboard</span>
+                                </a>
+                            </li>
+                            <li id="casemanagement" class="ng-scope has-sub">
+                                <a>
+                                    <i class="fa fa-address-card-o"></i>
+                                    <span class="title ng-binding">Case Management</span>
+                                </a>
+                                <ul id="ulcasemanagement" class="ng-scope">
+                                    <li id="caselist" class="ng-scope">
+                                        <!-- ngIf: subMenu.state -->
+                                        <a [routerLink]="['/casehistory']" ui-sref="app.officerCaseList" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding">Case List</span>
+                                        </a>
+                                        <!-- end ngIf: subMenu.state -->
+                                    </li>
+                                    <!-- end ngRepeat: subMenu in item.items -->
+                                    <li id="addcase" ng-repeat="subMenu in item.items" class="ng-scope">
+                                        <a [routerLink]="['/case']" ui-sref="app.officerCaseAdd" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding">Add Case</span>
+                                        </a>
+                                        <!-- end ngIf: subMenu.state -->
+                                    </li>
+                                    <!-- end ngRepeat: subMenu in item.items -->
+                                </ul>
+                                <!-- end ngIf: item.items.length -->
+                            </li>
+                            <li id=checkinmanagement class="ng-scope has-sub">
+                                <a>
+                                    <i class="fa fa-calendar-check-o"></i>
+                                    <span class="title ng-binding">Checkin Management</span>
+                                </a>
+                                <ul id="ulcheckinmanagement" class="ng-scope">
+                                    <li id="chekinhistory" class="ng-scope">
+                                        <!-- ngIf: subMenu.state -->
+                                        <a [routerLink]="['/checkinhistory']" ui-sref="app.officerCheckinList" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding" ng-bind="subMenu.name">Checkin History</span>
+                                        </a>
+                                    </li>
+                                    <li id="addcheckin" class="ng-scope">
+                                        <a [routerLink]="['/checkin']" ui-sref="app.officerCheckinAdd" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding">Add Checkin</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li id="domainassessment" class="ng-scope has-sub">
+                                <a>
+                                    <i class="fa fa-question-circle-o"></i>
+                                    <span class="title ng-binding">Domain Assessments</span>
+                                </a>
+                                <ul id="uldomainassessment" class="ng-scope">
+                                    <li id=assessmenthistory class="ng-scope">
+
+                                        <a [routerLink]="['/assessmenthistory']" ui-sref="app.officerAssesmentHistory" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding">Assessments History</span>
+                                        </a>
+                                    </li>
+
+                                    <li id="addassessment" ng-class="{'opened': subMenu.isOpen, 'active': vm.isActive(subMenu.state)}" class="ng-scope">
+
+                                        <a [routerLink]="['/assessment']" ui-sref="app.officerAssesmentAdd" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding">Add Assessments</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="emojis" class="ng-scope has-sub">
+                                <a>
+                                    <i class="fa fa-smile-o"></i>
+                                    <span class="title ng-binding">Emojis</span>
+                                </a>
+                                <ul id="ulemojis" class="ng-scope">
+                                    <li id="emojilist" class="ng-scope">
+
+                                        <a [routerLink]="['/emojihistory']" ui-sref="app.officerAllEmoji" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding" ng-bind="subMenu.name">Emoji List</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="notification" class="ng-scope has-sub">
+                                <a>
+                                    <i class="fa fa-bell-o"></i>
+                                    <span class="title ng-binding">Notifications</span>
+                                </a>
+                                <ul id="ulnotification" class="ng-scope">
+                                    <!-- ngRepeat: subMenu in item.items -->
+                                    <li id="allnotification" class="ng-scope">
+
+                                        <a [routerLink]="['/notificationhistory']" ui-sref="app.officerAllNotifications" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding" ng-bind="subMenu.name">All Notifications</span>
+                                        </a>
+
+                                    </li>
+
+                                    <li id="sendnotification" class="ng-scope">
+
+                                        <a [routerLink]="['/notification']" ui-sref="app.officerAddNotification" ui-sref-opts="{reload:true}" class="ng-scope">
+                                            <span class="title ng-binding" ng-bind="subMenu.name">Send Notification</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+
+
+                    <div class="nano-pane">
+
+                        <div class="nano-slider" style="height: 137px; transform: translate(0px, 0px);">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="main-remove-content" class="main-content">
+            <nav class="navbar user-info-navbar" id=navmenu role="navigation">
+                <ul (click)="navminmize()" class="user-info-menu left-links list-inline list-unstyled">
+                    <li class="hidden-xs" ng-hide="false" ng-click="vm.isCollapsed = !vm.isCollapsed">
+                        <a href="" data-toggle="sidebar">
+                            <i class="fa-bars"></i>
+                        </a>
+                    </li>
+                    <!-- ngIf: false -->
+                </ul>
+                <ul class="user-info-menu right-links list-inline list-unstyled">
+                    <li class="dropdown user-profile" (click)="logoutview()" id="logoutview">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            <span style="text-transform: capitalize" class="ng-binding">
+                                <i class="fa fa-user-circle"></i> {{firstName}}
+                                <i class="fa-angle-down"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu user-profile-menu list-unstyled">
+                            <li>
+                                <a [routerLink]="['/editprofile']" title="Edit Profile" href="javascript:void(0);">
+                                    <i class="fa-edit"></i> Edit Profile</a>
+                            </li>
+                            <li>
+                                <a [routerLink]="['/changepassword']" title="Change Password" href="javascript:void(0);">
+                                    <i class="fa-wrench"></i> Change Password</a>
+                            </li>
+                            <li class="last">
+                                <a (click)="logout()" title="Logout">
+                                    <i class="fa-lock"></i> Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <alert></alert>
+            <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>

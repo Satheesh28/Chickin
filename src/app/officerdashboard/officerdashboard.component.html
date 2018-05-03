@@ -1,0 +1,443 @@
+﻿<style>
+    a {
+        cursor: pointer;
+    }
+    agm-map {
+        height: 300px;
+    }
+</style>
+<div class="row ng-scope">
+    <div class="col-sm-12">
+        <div class="title-env">
+            <h1 class="title">Alert Overview</h1>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-md-6 col-sm-12 mb_10">
+                <div class="alertlist col-sm-12 clearfix nice_scroll_short">
+                    <div class="">
+                        <h3>Help Alerts</h3>
+                    </div>       
+                    <div class="row mb_10 middle_text_row ng-scope" *ngFor="let alert of HelpAlertList">
+                        <div class="col-xs-3 ng-binding">
+                                <div>
+                            <img class="product-img imgback" src="{{domainConfigUrl}}Data/cases/{{alert.case_id}}{{alert.photograph}}" class="img-circle"
+                                alt="user-pic" style="width: 40px !important;height: 40px !important;">
+                               </div>   
+                                <div>
+                                    {{alert.first_name}} {{alert.last_name}}
+                                </div>
+                        </div>                     
+
+                        <div class="col-xs-3 ng-binding">
+                            {{alert.createdon | date:'MM-dd-yyyy hh:mm'}}
+                        </div>
+
+                        <div class="col-xs-2 ng-binding">
+                            <a class="map-ind-view" data-toggle="modal" data-backdrop="static" data-keyboard="false" style="cursor: pointer" (click)="ViewMap(alert)"
+                                data-target="#myModal">View Map</a>
+                        </div>
+                        <div class="col-xs-3 ng-binding">
+                            <audio controls="controls" autobuffer="autobuffer">
+                                <source type="audio/mp3" src="{{domainConfigUrl}}Data/cases/{{alert.case_id}}{{alert.audio}}">
+                            </audio>
+                        </div>
+                        <div class="col-xs-1 ng-binding">
+                            <a class="red_color" href="javascript:void(0)" data-toggle="modal" (click)="deleteid(alert.id)" data-target="#notificationdelete">
+                                <i class="fa fa-minus-circle"></i>
+                            </a>
+                        </div>
+                    </div>
+            
+                </div>
+                <div class="col-md-12 red">
+                    <div class="col-xs-4 footer_block_bold ng-binding">{{helpalertCount}}</div>
+                    <div class="col-xs-8 footer_block_bold text-right">
+                        Help Alerts
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12 mb_10">
+
+                <div class="alertlist clearfix nice_scroll_short">
+                    <div style="padding-left:2%">
+                        <h3>Checkin Alerts</h3>
+                    </div>
+                    <div class="col-sm-12">
+                     
+                        <div *ngFor="let CheckinAlerts of HomeCheckinAlertss; index as i;">
+
+                            <div id="{{i}}" name="{{i}}" class="row mb_10 middle_text_row" [ngStyle]="{'color': CheckinAlerts.status}">
+                                <div class="col-xs-2 ng-binding">
+                                    <img class="product-img imgback" (click)="CaseRedirect(CheckinAlerts)" src="{{domainConfigUrl}}Data/cases/{{CheckinAlerts.case_id}}{{CheckinAlerts.photograph}}"
+                                        class="img-circle" style="width: 40px !important;height: 40px !important;">
+                                </div>
+                                <div class="col-xs-3 ng-binding" (click)="CaseRedirect(CheckinAlerts)">{{CheckinAlerts.first_name}} {{CheckinAlerts.last_name}}</div>
+                                <div class="col-xs-4 ng-binding">{{CheckinAlerts.due_date | date:'MM-dd-yyyy hh:mm'}}</div>
+                                <div class="col-xs-3 ng-binding">{{CheckinAlerts.time_left}}</div>
+                            
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="">
+                    <div class="red col-sm-12" ng-class="vm.setClassCheckin()">
+                        <div class="row">
+                            <div class="col-xs-4 footer_block_bold ng-binding" ng-bind="vm.pastCheckIn">{{CheckInAlertsRed}}</div>
+                            <div class="col-xs-8 footer_block_bold text-right">Missed</div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row ng-scope">
+    <div class="col-sm-4 mb_30">
+        <div class="">
+            <h3>Case Overview</h3>
+        </div>
+        <div class="alertlist clearfix col-sm-12 padding_20 nice_scroll">
+            <div class="row">
+                <div class="col-xs-8">
+                    <span class="ng-binding">Total Cases:{{CaseOverviewTotal}}</span>
+                </div>
+
+            </div>
+
+            <div *ngFor="let CaseOverview of HomeCaseOverview" class="col-xs-12 case_block mb_10 ng-scope">
+                <div class="row padding_20">
+                    <div class="col-xs-8">
+                        <div style="padding-left:0px;padding-right:0px;" class="col-xs-4" ng-class="vm.getCaseClass(case)">
+                           
+                            <img class="img-circle ng-scope" style="width: 40px !important;height: 40px !important" src="{{domainConfigUrl}}Data/cases/{{CaseOverview.case_id}}{{CaseOverview.photograph}}">
+                           
+                        </div>
+
+                        <div class="col-xs-6 col-xs-offset-1" style="padding-left:0px;padding-right:0px;padding-top: 5%; float: right;">
+                            <div [hidden]="CaseOverview.longlat == 0">
+                                <i class="fa fa-map" style="font-size:20px;color:#111;padding-bottom: 10px" aria-hidden="true"></i>
+
+                                <button class="editbtn" data-toggle="modal" data-backdrop="static" data-keyboard="false" style="cursor: pointer" (click)="ViewMap(CaseOverview)"
+                                    data-target="#myModal">Map</button>
+
+                            </div>
+                        </div>
+                        <div class="col-xs-12" style="padding-left:0px;padding-right:0px;">
+                            <h5 style="color:#2c2e2f;font-size:16px;">{{CaseOverview.first_name}} {{CaseOverview.last_name}}</h5>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-4 text-center points_blocks">
+                        <div *ngIf="CaseOverview.battery == 0">
+                            <img *ngIf="CaseOverview.battery == 0" src="assets/img/battery/nosignal.png" style="width:40%;" class="ng-scope">
+                        </div>
+                        <div *ngIf="CaseOverview.battery > 0">
+                            <img *ngIf="CaseOverview.battery < 25" src="assets/img/battery/red.png" style="width:40%;" class="ng-scope">
+                        </div>
+                        <div *ngIf="CaseOverview.battery >= 25">
+                            <img *ngIf="CaseOverview.battery < 50" src="assets/img/battery/orange.png" style="width:40%;" class="ng-scope">
+                        </div>
+                        <div *ngIf="CaseOverview.battery >= 50">
+                            <img *ngIf="CaseOverview.battery < 75" src="assets/img/battery/yellow.png" style="width:40%;" class="ng-scope">
+                        </div>
+                        <div *ngIf="CaseOverview.battery >= 75">
+                            <img *ngIf="CaseOverview.battery <= 100" src="assets/img/battery/green.png" style="width:40%;" class="ng-scope">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" style="padding-bottom:2%">
+                    <div class="col-xs-5">Points:
+                        <span ng-bind="case.totalScore" class="ng-binding">{{CaseOverview.score}}</span>
+                    </div>
+                    <div class="col-xs-7" style="text-align:center;padding-left: 15%;">Power:
+                        <span ng-bind="case.totalScore" class="ng-binding">{{CaseOverview.battery}} %</span>
+                    </div>
+                </div>
+                <div class="row" style="border-top:1px solid #ccc">
+                    <a class="text-center col-xs-6 btn" style="border-right:1px solid #ccc; margin-bottom:0" (click)="viewprofile(CaseOverview.case_id)">View profile</a>
+                    <a class="text-center col-xs-6 btn" style="margin-left:0; margin-bottom:0" data-toggle="modal" data-target="#SendMessage"
+                        (click)="SendMessageOpen(CaseOverview)">Send Message</a>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    <div class="col-sm-4 mb_30">
+        <div class="">
+            <h3>Metrics Overview</h3>
+        </div>
+    
+        <div class="alertlist clearfix col-sm-12 padding_20 nice_scroll">
+            <div class="row">
+                <div class="col-xs-7">
+                    <span>Performance Metrics</span>
+                </div>
+                <div class="col-xs-5 form-group text-right">
+                    <select class="form-control invisible_select ng-pristine ng-untouched ng-valid ng-not-empty" [(ngModel)]="MetricsOverviewName"
+                        (change)="ChangeMetrics(MetricsOverviewName)">
+                        <option label="All" value="0" selected="selected">All</option>
+                        <option *ngFor="let MetricsOverviewName of MetricsOverviewnamelist" [ngValue]="MetricsOverviewName.id">
+                            {{MetricsOverviewName.first_name}} {{MetricsOverviewName.last_name}}
+
+                    </select>
+                </div>
+            </div>
+           
+            <div class="col-xs-12 mb_10 ng-scope" ng-repeat="(metKey, metVal) in vm.met[0]">
+                <div class="row">
+                  
+                    <div class="col-xs-12 metric_block green" ng-if="metKey=='amissedCheckin'">
+                        <div class="metric_block_name">
+                            <h4>Total Missed Checkins</h4>
+                        </div>
+                        <div class="row">
+                            <div class="metric_numbers col-xs-7">
+                                <h4 class="ng-binding">{{Totalcheck}}</h4>
+                            </div>
+                            <div class="metric_numbers col-xs-5 text-center">
+                                <h4 class="ng-binding">{{Totalcheck1}}
+                                    <span>From last month</span>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+           
+            <div class="col-xs-12 mb_10 ng-scope" ng-repeat="(metKey, metVal) in vm.met[0]">
+                <div class="row">
+                   
+                    <div class="col-xs-12 metric_block green" ng-if="metKey=='assesment'">
+                        <div class="metric_block_name">
+                            <h4>Total Assessments</h4>
+                        </div>
+                        <div class="row">
+                            <div class="metric_numbers col-xs-7">
+                                <h4 class="ng-binding">{{Totalassignment}}</h4>
+                            </div>
+                            <div class="metric_numbers col-xs-5 text-center">
+                                <h4 class="ng-binding">{{Totalassignment1}}
+                                    <span>From last month</span>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+          
+            <div class="col-xs-12 mb_10 ng-scope" ng-repeat="(metKey, metVal) in vm.met[0]">
+                <div class="row">
+               
+                    <div class="col-xs-12 metric_block green" ng-if="metKey=='emojis'">
+                        <div class="metric_block_name">
+                            <h4>Total Emoji Checkins</h4>
+                        </div>
+                        <div class="row">
+                            <div class="metric_numbers col-xs-7">
+                                <h4 class="ng-binding">{{Totalemoji}}</h4>
+                            </div>
+                            <div class="metric_numbers col-xs-5 text-center">
+                                <h4 class="ng-binding">{{Totalemoji1}}
+                                    <span>From last month</span>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+          
+            <div class="col-xs-12 mb_10 ng-scope" ng-repeat="(metKey, metVal) in vm.met[0]">
+                <div class="row">
+                   
+                    <div class="col-xs-12 metric_block green" ng-if="metKey=='helpAlert'">
+                        <div class="metric_block_name">
+                            <h4>Total Help Alerts</h4>
+                        </div>
+                        <div class="row">
+                            <div class="metric_numbers col-xs-7">
+                                <h4 class="ng-binding">{{Totalhelp}}</h4>
+                            </div>
+                            <div class="metric_numbers col-xs-5 text-center">
+                                <h4 class="ng-binding">{{Totalhelp1}}
+                                    <span>From last month</span>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+         
+        </div>
+    </div>
+    <div class="col-sm-4 mb_30">
+        <div class="">
+            <h3>Domain Overview</h3>
+        </div>
+        <div class="alertlist clearfix col-sm-12 padding_20 nice_scroll">
+            <div class="row">
+                <div class="col-xs-7">
+                    <span>Total Points</span>
+                </div>
+                <div class="col-xs-5 form-group text-right">
+                    <select class="form-control invisible_select ng-pristine ng-untouched ng-valid ng-not-empty" [(ngModel)]="DomainOverviewName"
+                        (change)="ChangeDomain(DomainOverviewName)">
+                        <option label="All" value="string:0" selected="selected">All</option>
+                        <option *ngFor="let DomainOverviewName of HomeDomainOverview" [ngValue]="DomainOverviewName.case_id">
+                            {{DomainOverviewName.first_name}} {{DomainOverviewName.last_name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-12 mb_10 middle_text_row domain_block blue">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="small_thumb">
+                            <img src="assets/img/domain/work.png" title="Work" alt="">
+                        </div>Work
+                    </div>
+                    <div class="col-sm-3 text-right ng-binding">{{DomainWork}}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 mb_10 middle_text_row domain_block black">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="small_thumb">
+                            <img src="assets/img/domain/education.png" title="Education" alt="">
+                        </div>Education
+                    </div>
+                    <div class="col-sm-3 text-right ng-binding">{{DomainEducation}}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 mb_10 middle_text_row domain_block purple">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="small_thumb">
+                            <img src="assets/img/domain/creativity.png" title="Creativity" alt="">
+                        </div>Creativity
+                    </div>
+                    <div class="col-sm-3 text-right ng-binding">{{DomainCreativity}}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 mb_10 middle_text_row domain_block yellow">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="small_thumb">
+                            <img src="assets/img/domain/relationships.png" title="Relationships" alt="">
+                        </div>Relationships
+                    </div>
+                    <div class="col-sm-3 text-right ng-binding">{{DomainRelationships}}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 mb_10 middle_text_row domain_block green">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="small_thumb">
+                            <img src="assets/img/domain/community.png" title="Community" alt="">
+                        </div>Community
+                    </div>
+                    <div class="col-sm-3 text-right ng-binding">{{DomainCommunity}}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 middle_text_row domain_block red">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="small_thumb">
+                            <img src="assets/img/domain/health.png" title="Health" alt="">
+                        </div>Health
+                    </div>
+                    <div class="col-sm-3 text-right ng-binding">{{DomainHealth}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="SendMessage" class="modal" role="dialog" size="md" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" uib-modal-transclude="">
+            <div class="modal-header ng-scope">
+                <h3 class="modal-title" id="modal-title">
+                    <span class="ng-binding">{{MessageSenderName}}</span>
+                </h3>
+            </div>
+            <form role="form" name="form" #form="ngForm" name="form" #notification="ngForm" class="form-horizontal ng-pristine ng-scope ng-invalid ng-invalid-required"
+                accept-charset="utf-8">
+                <div class="modal-body map-modal" id="modal-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Enter notification text</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <label class="col-sm-4 col-xs-4 control-label required" for="location">Notification Text
+
+                                </label>
+                                <div class="col-sm-8 col-xs-8">
+                                    <textarea type="text" id="sendmessage" name="sendmessage" [(ngModel)]="sendmessage" required class="form-control" placeholder="Notification text"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-sm-12 text-right">
+                            <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-secondary" [disabled]="notification.form.invalid" (click)="SendNotification()">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="notificationdelete" class="modal" role="dialog" size="md" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" uib-modal-transclude="">
+            <div class="modal-header ng-scope">
+                <h3 class="modal-title ng-binding" id="modal-title">Confirm delete help alert</h3>
+            </div>
+            <div class="modal-body ng-binding ng-scope" id="modal-body">Are you sure to delete this help alert?</div>
+            <div class="modal-footer ng-scope">
+                <button class="btn btn-primary" type="btn btn-secondary" data-dismiss="modal" (click)="deleteHelpAlert()">OK</button>
+                <button class="btn btn-warning" type="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>`</div>
+    </div>
+</div>
+
+
+<div id="myModal" class="modal" role="dialog" size="md" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">CheckIn</h4>
+            </div>
+            <div class="modal-body">
+                <section class="profile-env">
+                    <div class="row">
+                        <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [streetView]="true" [scrollwheel]="true" [zoomControl]="true">
+                            <agm-marker [latitude]="lat" [longitude]="lng">
+                                <agm-info-window>
+                                    <strong>{{mapdate | date:'MM-dd-yyyy hh:mm'}}</strong>
+                                </agm-info-window>
+                            </agm-marker>
+                        </agm-map>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
